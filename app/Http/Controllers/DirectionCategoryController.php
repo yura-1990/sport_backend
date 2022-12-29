@@ -55,7 +55,7 @@ class DirectionCategoryController extends Controller
                 'direction_id', 'sub_category'
             )->get();
             return response()->json([
-                'status' => 'success',
+                'status' => 'ok',
                 'directionCategory'=>$directionCategory
             ],Response::HTTP_OK);
         }

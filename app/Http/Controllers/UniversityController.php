@@ -42,7 +42,7 @@ class UniversityController extends Controller
     {
         $university = University::all();
         return response()->json([
-            'status' => 'success',
+            'status' => 'ok',
             'message' => 'University comes successfully',
             'university' => $university,
         ]);
@@ -97,7 +97,7 @@ class UniversityController extends Controller
         ]);
 
         return response()->json([
-            'status' => 'success',
+            'status' => 'ok',
             'message' => 'University created successfully',
             'university' => $university,
         ]);
@@ -145,7 +145,7 @@ class UniversityController extends Controller
     public function showUniversity(University $university)
     {
         return response()->json([
-            'status' => 'success',
+            'status' => 'ok',
             'university' => $university,
         ]);
     }
@@ -218,7 +218,7 @@ class UniversityController extends Controller
         ]);
 
         return response()->json([
-            'status' => 'success',
+            'status' => 'ok',
             'message' => 'University updated successfully',
             'university' => $university,
         ]);
@@ -265,7 +265,7 @@ class UniversityController extends Controller
     {
         $university->delete();
         return response()->json([
-            'status' => 'success',
+            'status' => 'ok',
             'message' => 'university deleted successfully',
             'university' => $university,
         ]);

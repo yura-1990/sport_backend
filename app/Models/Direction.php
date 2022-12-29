@@ -13,7 +13,7 @@ class Direction extends Model
 
     public function users()
     {
-        return $this->belongsToMany(User::class, 'direction_user');
+        return $this->belongsToMany(User::class, 'checks')->distinct();
     }
 
     public function directionCategory(): \Illuminate\Database\Eloquent\Relations\HasMany
@@ -23,5 +23,9 @@ class Direction extends Model
 
     public function check(){
         return $this->hasMany(Check::class);
+    }
+
+    public function allScore(){
+        return $this->hasMany(AllScore::class);
     }
 }

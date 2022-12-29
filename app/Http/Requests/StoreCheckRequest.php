@@ -29,6 +29,7 @@ class StoreCheckRequest extends FormRequest
             'direction_id'=>'required',
             'direction_category_id'=>'required',
             'direction_category_name'=>'required',
+            'score'=>'nullable',
             'pdf'=>["nullable", File::types('pdf')],
             'admin_permission'=>'nullable',
             'messages'=>'nullable',

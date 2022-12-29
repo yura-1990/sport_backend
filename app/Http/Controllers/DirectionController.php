@@ -4,7 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreDirectionRequest;
 use App\Http\Requests\UpdateDirectionRequest;
+use App\Models\Check;
+use App\Models\CheckUser;
 use App\Models\Direction;
+use App\Models\PortfolioUser;
+use App\Models\StatisticUser;
+use App\Models\User;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
@@ -67,9 +72,17 @@ class DirectionController extends Controller
     {
         try {
             $direction = Direction::select('id', LocaleTrait::convert('title'))->get();
+            $datas = [];
+
+
+            foreach ($direction as $direct){
+                $datas[]=new DirectionResource($direct);
+            }
+
+
             return response()->json([
-                'status' => __('Success'),
-                'direction' => $direction
+                'status' => __('ok'),
+                'direction' => $datas
             ],Response::HTTP_OK);
         }
         catch (\Exception $e){
@@ -143,7 +156,7 @@ class DirectionController extends Controller
             $direction->save();
 
             return response()->json([
-                'status' => __('Success'),
+                'status' => __('ok'),
                 'local'=> App::getLocale(),
                 'message' => __('Data updated successfully'),
                 'direction' => $direction
@@ -212,7 +225,7 @@ class DirectionController extends Controller
         $data = Direction::select('id', LocaleTrait::convert('title'))->where('id', $id)->get();
         try {
             return response()->json([
-                'status' => __('Success'),
+                'status' => __('ok'),
                 'direction'=> $data
             ],Response::HTTP_OK);
         }
@@ -295,7 +308,7 @@ class DirectionController extends Controller
             $direction->update();
 
             return response()->json([
-                'status' => __('Success'),
+                'status' => __('ok'),
                 'direction'=> $direction->select('id', LocaleTrait::convert('title'))->where('id', $direction->id)->get(),
             ],Response::HTTP_OK);
         }
@@ -359,7 +372,7 @@ class DirectionController extends Controller
             $direction=Direction::find($id);
             $direction->delete();
             return response()->json([
-                'status' => __('Success'),
+                'status' => __('ok'),
                 'direction'=>  $direction
 
             ],Response::HTTP_OK);

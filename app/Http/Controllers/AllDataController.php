@@ -76,6 +76,28 @@ class AllDataController extends Controller
             'training'=>$training,
             'region' => $region
         ]);
+        /*$avatar = Avatar::all();
+        $education = Education::all();
+        $fillial = Fillial::all();
+        $personalInfo = PersonalInfo::all();
+        $pasport = Pasport::all();
+        $user = User::all();
+        $work = Work::all();
+        $training = Training::all();
+        $region = Region::all();
+        return response()->json([
+            'status' => 'ok',
+            'message' => 'All data',
+            'avatar' => $avatar,
+            'education'=>$education,
+            'fillial'=>$fillial,
+            'personalInfo'=>$personalInfo,
+            'pasport'=>$pasport,
+            'user' =>$user,
+            'work'=>$work,
+            'training'=>$training,
+            'region' => $region
+        ]);*/
     }
 
     /**
@@ -140,6 +162,8 @@ class AllDataController extends Controller
         $user_data = User::find($id);
         $user_of_region = Region::find(Education::where('user_id', $id)->first()->region_id);
 
+
+
         return response()->json([
             'message'=>$user_of_region,
             'user_personal_info'=> $user_data->personalInfo,
@@ -152,6 +176,25 @@ class AllDataController extends Controller
             'user_userPdf' => $user_data->userPdf,
             'user_directions' => $user_data->directions,
         ]);
+
+
+        /*$user_data = User::find($id);
+
+        $personalInfos['personal_info']=$user_data->personalInfo ?? null;
+        $personalInfos['pasport']=$user_data->pasport ?? null;
+        $personalInfos['education']=$user_data->education ?? null;
+        $personalInfos['work']=$user_data->work ?? null;
+        $personalInfos['training']=$user_data->training ?? null;
+        $personalInfos['avatar']=$user_data->avatar ?? null;
+
+
+
+        $data[] = $personalInfos;
+
+        return response()->json([
+            'status'=>'ok',
+            'datas' => $data
+        ]);*/
     }
 
     /**

@@ -6,5 +6,8 @@
     "Click here to reset your password": "Parolingizni tiklash uchun shu yerni bosing",
     "New Password": "Yangi Parol",
     "Submit": "Yuborish",
-    "404 page not found": "404 sahifa topilmadi"
+    "404 page not found": "404 sahifa topilmadi",
+    "Dashboard": "Boshqaruv paneli",
+    "Your pnfl is not match with the entering data" :"Sizning pnfl kiritilgan ma'lumotlarga mos kelmaydi",
+    "This data is not in our list": "Ushbu ma'lumotlar bizning ro'yxatimizda yo'q"
 }

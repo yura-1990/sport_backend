@@ -53,7 +53,7 @@ class TrainingController extends Controller
         try {
             $trainings = Training::all();
             return response()->json([
-                'status' => __('Success'),
+                'status' => __('ok'),
                 'message' => __('Data came successfully'),
                 'trainings' => $trainings,
             ], Response::HTTP_OK);
@@ -148,7 +148,7 @@ class TrainingController extends Controller
             ]);
 
             return response()->json([
-                'status' => __('Success'),
+                'status' => __('ok'),
                 'message' => __('Data created successfully'),
                 'training' => $training,
             ], Response::HTTP_OK);
@@ -213,7 +213,7 @@ class TrainingController extends Controller
     {
         try {
             return response()->json([
-                'status' => __('Success'),
+                'status' => __('ok'),
                 'trining' => $training,
             ], Response::HTTP_OK);
         }
@@ -327,7 +327,7 @@ class TrainingController extends Controller
             ]);
 
             return response()->json([
-                'status' => __('Success'),
+                'status' => __('ok'),
                 'message' => __('Data updated successfully'),
                 'training' => $training,
             ], Response::HTTP_OK);
@@ -391,7 +391,7 @@ class TrainingController extends Controller
         try {
             $training->delete();
             return response()->json([
-                'status' => __('Success'),
+                'status' => __('ok'),
                 'message' => __('Data deleted successfully'),
                 'training' => $training,
             ], Response::HTTP_OK);

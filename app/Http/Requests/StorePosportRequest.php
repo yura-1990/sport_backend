@@ -24,7 +24,7 @@ class StorePosportRequest extends FormRequest
     public function rules()
     {
         return [
-            'pnfl'=>'required|min:14|max:14',
+            'pnfl'=>'required',
             'pasport_seria'=>'required',
             'pasport_seria_code'=>'required',
         ];

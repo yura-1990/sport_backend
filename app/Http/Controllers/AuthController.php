@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\LoginUserRequest;
 use App\Http\Requests\RegisterUserRequest;
+use App\Http\Requests\UpdateUserRequest;
 use App\Models\Pasport;
 use App\Models\PersonalInfo;
 use App\Models\User;
 use App\Models\PasswordReset;
+use App\Services\NotificationService;
 use Carbon\Carbon;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Http\Request;
@@ -16,6 +18,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Str;
+use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
 {
@@ -30,14 +33,6 @@ class AuthController extends Controller
      *     tags={"Auth"},
      *     summary="Login the user",
      *     operationId="login",
-     *     @OA\Parameter(
-     *         name="Accept-Language",
-     *         in="header",
-     *         description="Set language parameter by typing uz, ru, en",
-     *         @OA\Schema(
-     *             type="string"
-     *         )
-     *     ),
      *     @OA\Parameter(
      *         name="Accept-Language",
      *         in="header",
@@ -82,7 +77,7 @@ class AuthController extends Controller
         $request->validated();
         $credentials = $request->only('login', 'password');
 
-        $token = Auth::attempt($credentials);
+        $token = JWTAuth::attempt($credentials);
 
         if (!$token){
             return response()->json([
@@ -94,7 +89,7 @@ class AuthController extends Controller
         $user = Auth::user();
 
         return response()->json([
-            'status' => 'success',
+            'status' => 'ok',
             'user' => $user,
             'authorisation' => [
                 'token' => $token,
@@ -109,14 +104,6 @@ class AuthController extends Controller
      *     tags={"Auth"},
      *     summary="Register a user",
      *     operationId="register",
-     *     @OA\Parameter(
-     *         name="Accept-Language",
-     *         in="header",
-     *         description="Set language parameter by typing uz, ru, en",
-     *         @OA\Schema(
-     *             type="string"
-     *         )
-     *     ),
      *     @OA\Parameter(
      *         name="Accept-Language",
      *         in="header",
@@ -161,7 +148,7 @@ class AuthController extends Controller
      * )
      */
 
-    public function register(RegisterUserRequest $request)
+    public function register(RegisterUserRequest $request, NotificationService $service)
     {
         $request->validated();
 
@@ -173,10 +160,15 @@ class AuthController extends Controller
             'pasport_id' => $request->pasport_id
         ]);
 
-        $token = Auth::login($user);
+        $service->create('User created', $user, [1]);
+
+        $token = JWTAuth::attempt([
+            'login'=>$request->login,
+            'password'=>$request->password
+        ]);
 
         return response()->json([
-            'status' => 'success',
+            'status' => 'ok',
             'message' => 'User created successfully',
             'user' => $user,
             'authorisation' => [
@@ -192,7 +184,7 @@ class AuthController extends Controller
     {
         Auth::logout();
         return response()->json([
-            'status' => 'success',
+            'status' => 'ok',
             'message' => 'Successfully logged out',
         ]);
     }
@@ -216,7 +208,7 @@ class AuthController extends Controller
     public function refresh()
     {
         return response()->json([
-            'status' => 'success',
+            'status' => 'ok',
             'user' => Auth::user(),
             'authorisation' => [
                 'token' => Auth::refresh(),
@@ -229,8 +221,8 @@ class AuthController extends Controller
     // forget password api method
 
     /**
-     * @OA\Post(
-     *     path="/api/forgot-password",
+     * @OA\Put(
+     *     path="/api/forgot-password/{pnfl}",
      *     tags={"Auth"},
      *     summary="If you forgot password",
      *     description="Change you password with your email",
@@ -242,6 +234,16 @@ class AuthController extends Controller
      *             type="string"
      *         )
      *     ),
+     *     @OA\Parameter(
+     *         name="pnfl",
+     *         in="path",
+     *         description="pnfl for resent password",
+     *         required=true,
+     *         @OA\Schema(
+     *             type="integer",
+     *             format="int64"
+     *         )
+     *     ),
      *     @OA\RequestBody(
      *         description="Input data format",
      *         @OA\MediaType(
@@ -249,13 +251,18 @@ class AuthController extends Controller
      *             @OA\Schema(
      *                 type="object",
      *                 @OA\Property(
-     *                     property="email",
-     *                     description="enter your email to updated password",
-     *                     type="email",
-     *                 )
+     *                     property="password",
+     *                     description="Type your pasport seria",
+     *                     type="string"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="password_confirmation",
+     *                     description="Type your pasport seria code",
+     *                     type="integer"
+     *                 ),
      *             )
      *         )
-     *     ),
+     *      ),
      *     @OA\Response(
      *         response=200,
      *         description="successful operation",
@@ -264,11 +271,29 @@ class AuthController extends Controller
      */
 
 
-    public function forgotPassword(Request $request): \Illuminate\Http\JsonResponse
+
+    public function forgotPassword(UpdateUserRequest $request, $pnfl): \Illuminate\Http\JsonResponse
     {
 
         try {
-            $email = PersonalInfo::where('email', $request->email)->get();
+            $passport = Pasport::where('pnfl', $pnfl)->first()->id ?? null;
+            $request->validated();
+
+            if($passport){
+                $user = User::where('pasport_id', $passport)->first();
+                $user->password = Hash::make($request->password);
+                $user->save();
+                return response()->json([
+                    'success' => true,
+                    'message' => $user
+                ]);
+            }else {
+                return response()->json([
+                    'message' => __('your pnfl is not match with the entering data')
+                ]);
+            }
+
+            /*$email = PersonalInfo::where('email', $request->email)->get();
             if (count($email) > 0){
                 $token =  Str::random(40);
                 $domain = URL::to('/');
@@ -303,7 +328,7 @@ class AuthController extends Controller
                     'success'=>false,
                     'message'=>'User is not found'
                 ]);
-            }
+            }*/
 
         } catch (\Exception $exception ){
             return response()->json([

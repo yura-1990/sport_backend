@@ -52,7 +52,7 @@ class RegionController extends Controller
         try {
             $regions = Region::select('id', LocaleTrait::convert('name'))->get();
             return response()->json([
-                'status' => __('Success'),
+                'status' => __('ok'),
                 'message' => __('Data came successfully'),
                 'regions' => $regions,
             ], Response::HTTP_OK);

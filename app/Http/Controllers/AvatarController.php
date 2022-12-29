@@ -52,7 +52,7 @@ class AvatarController extends Controller
         try {
             $avatar = Avatar::all();
             return response()->json([
-                'status' => 'success',
+                'status' => 'ok',
                 'message' => 'Avatar created successfully',
                 'avatar' => $avatar,
             ], Response::HTTP_OK);
@@ -117,19 +117,30 @@ class AvatarController extends Controller
     {
         try {
             $request->validated();
-            $avatar = new Avatar;
+
             if ($request->hasFile('photo')){
+                $getPhotoPath = Avatar::where('user_id', $request->user_id)->first()->photo ?? null;
+
+                if ($getPhotoPath){
+                    Storage::disk('public')->delete($getPhotoPath);
+                }
                 $path = $request->file('photo')->store('avatars', 'public');
             }
-            $avatar->user_id = $request->user_id;
-            $avatar->photo = $path ?? null;
-            $avatar->save();
 
+            $avatar = Avatar::updateOrCreate(
+                ['user_id' => $request->user_id],
+                [
+                    'user_id'=>$request->user_id,
+                    'photo' => $path,
+                ],
+            );
             return response()->json([
-                'status' => 'success',
-                'message' => 'Avatar created successfully',
+                'status' => 'ok',
+                'message' => 'Avatar created or updated successfully',
                 'avatar' => $avatar,
             ], Response::HTTP_OK);
+
+
         }
         catch (\Exception $e){
             return
@@ -192,8 +203,66 @@ class AvatarController extends Controller
     {
         try {
             return response()->json([
-                'status' => 'success',
+                'status' => 'ok',
                 'avatar' => $avatar,
+            ], Response::HTTP_OK);
+        }
+        catch (\Exception $e){
+            return
+                response()->json([
+                    'status' => false,
+                    'message' => $e->getMessage(),
+                ]);
+        }
+    }
+
+    /**
+     * @OA\Get(
+     *     path="/api/avatarByUserId/{user_id}",
+     *     tags={"Avatar"},
+     *     summary="Get one data from avatarByUserId",
+     *     description="Via this link a avatarByUserId`s data comes to show",
+     *     operationId="showAvatarByUserId",
+     *     @OA\Parameter(
+     *         name="Accept-Language",
+     *         in="header",
+     *         description="Set language parameter by typing uz, ru, en",
+     *         @OA\Schema(
+     *             type="string"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="user_id",
+     *         in="path",
+     *         description="ID for avatar data",
+     *         required=true,
+     *         @OA\Schema(
+     *             type="integer",
+     *             format="int64"
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="successful operation"
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthenticated"
+     *     ),
+     *      @OA\Response(
+     *         response=400,
+     *         description="Invalid status value"
+     *     ),
+     *  )
+     */
+
+    public function showAvatarByUserId($user_id)
+    {
+        try {
+            $getAvatarByUserId = Avatar::where('user_id', $user_id)->first();
+            return response()->json([
+                'status' => 'ok',
+                'avatarByUserId' => $getAvatarByUserId,
             ], Response::HTTP_OK);
         }
         catch (\Exception $e){
@@ -281,7 +350,7 @@ class AvatarController extends Controller
             ]);
 
             return response()->json([
-                'status' => 'success',
+                'status' => 'ok',
                 'message' => 'Avatar updated successfully',
                 'avatar' => $avatar,
             ], Response::HTTP_OK);
@@ -347,7 +416,7 @@ class AvatarController extends Controller
             Storage::disk('public')->delete($avatar->photo);
             $avatar->delete();
             return response()->json([
-                'status' => 'success',
+                'status' => 'ok',
                 'avatar'=> $avatar
             ], Response::HTTP_OK);
         }
@@ -359,4 +428,6 @@ class AvatarController extends Controller
                 ]);
         }
     }
+
+
 }

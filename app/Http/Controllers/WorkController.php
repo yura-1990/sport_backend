@@ -52,7 +52,7 @@ class WorkController extends Controller
         try {
             $work = Work::all();
             return response()->json([
-                'status' => __('Success'),
+                'status' => __('ok'),
                 'message' => __('Data came successfully'),
                 'work' => $work,
             ],Response::HTTP_OK);
@@ -179,7 +179,7 @@ class WorkController extends Controller
             ]);
 
             return response()->json([
-                'status' => __('Success'),
+                'status' => __('ok'),
                 'message' => __('Data created successfully'),
                 'work' => $work,
             ], Response::HTTP_OK);
@@ -244,7 +244,7 @@ class WorkController extends Controller
     {
         try {
             return response()->json([
-                'status' => 'success',
+                'status' => 'ok',
                 'education' => $work,
             ], Response::HTTP_OK);
         }
@@ -383,7 +383,7 @@ class WorkController extends Controller
             ]);
 
             return response()->json([
-                'status' => 'success',
+                'status' => 'ok',
                 'message' => 'Work updated successfully',
                 'work' => $work,
             ], Response::HTTP_OK);
@@ -447,7 +447,7 @@ class WorkController extends Controller
         try {
             $work->delete();
             return response()->json([
-                'status' => 'success',
+                'status' => 'ok',
                 'message' => 'Work deleted successfully',
                 'work' => $work,
             ], Response::HTTP_OK);

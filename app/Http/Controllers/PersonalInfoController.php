@@ -64,7 +64,7 @@ class PersonalInfoController extends Controller
             $personalInfos = PersonalInfo::all();
 
             return response()->json([
-                'status' => __('Success'),
+                'status' => __('ok'),
                 'personalInfos'=>$personalInfos
             ],Response::HTTP_OK);
         }
@@ -160,7 +160,10 @@ class PersonalInfoController extends Controller
         try {
             $request->validated();
 
-            $personalInfo=PersonalInfo::create([
+
+            $personalInfo=PersonalInfo::updateOrCreate(
+                ['user_id'=>$request->user_id],
+                [
                 'user_id'=>$request->user_id,
                 'full_name'=>$request->full_name,
                 'email'=>$request->email,
@@ -169,10 +172,11 @@ class PersonalInfoController extends Controller
                 'birth_date'=>$request->birth_date,
                 'nationality'=>$request->nationality,
                 'pasport_id'=>$request->pasport_id,
-            ]);
+                ]
+            );
 
             return response()->json([
-                'status' => 'success',
+                'status' => 'ok',
                 'message' => 'Personal Info created successfully',
                 'personal-info' => $personalInfo,
             ], Response::HTTP_OK);
@@ -237,7 +241,7 @@ class PersonalInfoController extends Controller
     {
         try {
             return response()->json([
-                'status' => 'success',
+                'status' => 'ok',
                 'personal' => $personalInfo,
             ], Response::HTTP_OK);
         }
@@ -363,7 +367,7 @@ class PersonalInfoController extends Controller
             ]);
 
             return response()->json([
-                'status' => 'success',
+                'status' => 'ok',
                 'message' => 'personal updated successfully',
                 'personal' => $personalInfo,
             ], Response::HTTP_OK);
@@ -399,7 +403,7 @@ class PersonalInfoController extends Controller
      *         )
      *     ),
      *     @OA\Parameter(
-     *         name="personal",
+     *         name="personalInfo",
      *         in="path",
      *         required=true,
      *         @OA\Schema(
@@ -427,7 +431,7 @@ class PersonalInfoController extends Controller
         try {
             $personalInfo->delete();
             return response()->json([
-                'status' => 'success',
+                'status' => 'ok',
                 'message' => 'Personal deleted successfully',
                 'personal' => $personalInfo,
             ], Response::HTTP_OK);

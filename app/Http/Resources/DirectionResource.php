@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use App\Http\Resources\UserResource;
 
 class DirectionResource extends JsonResource
 {
@@ -17,7 +18,8 @@ class DirectionResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'title' => $this->when(app()->getLocale(), $this->title_ . app()->getLocale())
+            'title' => $this->title_uz ?? $this->title_ru ?? $this->title_en,
+            'users'=> UserResource::collection($this->users)
         ];
     }
 }

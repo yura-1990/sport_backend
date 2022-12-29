@@ -11,7 +11,7 @@ class Check extends Model
     protected $fillable=['user_id', 'direction_id', 'direction_category_id', 'direction_category_name', 'pdf', 'admin_permission', 'messages'];
 
     public function direction(){
-        return $this->belongsTo(Direction::class);
+        return $this->belongsToMany(Direction::class);
     }
 
     public function directionCategory(){

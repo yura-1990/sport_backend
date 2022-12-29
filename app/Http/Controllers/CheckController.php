@@ -105,6 +105,11 @@ class CheckController extends Controller
      *                     type="integer"
      *                 ),
      *                 @OA\Property(
+     *                     property="score",
+     *                     description="Direction category score",
+     *                     type="integer"
+     *                 ),
+     *                 @OA\Property(
      *                     property="user_id",
      *                     description="User ID",
      *                     type="integer"
@@ -154,6 +159,7 @@ class CheckController extends Controller
             $check->pdf                    =$path;
             $check->admin_permission       =$request->admin_permission;
             $check->messages               =$request->admin_permission;
+            $check->score                  =$request->score;
             $check->save();
 
             return response()->json([
@@ -239,6 +245,68 @@ class CheckController extends Controller
     }
 
     /**
+     * @OA\Get(
+     *     path="/api/downloadPdf/{check_id}",
+     *     tags={"Check"},
+     *     summary="Get one data from UserPDF database",
+     *     description="Via this link a UserPDF`s data comes to show",
+     *     operationId="downloadPdf",
+     *     @OA\Parameter(
+     *         name="Accept-Language",
+     *         in="header",
+     *         description="Set language parameter by typing uz, ru, en",
+     *         @OA\Schema(
+     *             type="string"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="check_id",
+     *         in="path",
+     *         description="ID for userPdf data",
+     *         required=true,
+     *         @OA\Schema(
+     *             type="integer",
+     *             format="int64"
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="successful operation"
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthenticated"
+     *     ),
+     *      @OA\Response(
+     *         response=400,
+     *         description="Invalid status value"
+     *     ),
+     *  )
+     */
+
+    public function downloadPdf($check_id): \Illuminate\Http\JsonResponse
+    {
+        try {
+            $getpdf = Check::find($check_id)->pdf;
+            $file=Storage::url($getpdf);
+
+            $download['download-link']= response()->download(public_path($file));
+
+            return response()->json([
+                'status'=>'ok',
+                'download'=>$download
+            ]);
+        }
+        catch (\Exception $e){
+            return
+                response()->json([
+                    'status' => false,
+                    'message' => $e->getMessage(),
+                ]);
+        }
+    }
+
+    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -289,6 +357,10 @@ class CheckController extends Controller
      *                     property="direction_category_name",
      *                     description="Direction category name",
      *                     type="string"
+     *                 ), @OA\Property(
+     *                     property="score",
+     *                     description="score",
+     *                     type="integer"
      *                 ),
      *                 @OA\Property(
      *                     property="pdf",
@@ -326,6 +398,7 @@ class CheckController extends Controller
             }
 
             $check->direction_category_name = $request->input('direction_category_name');
+            $check->score = $request->input('score');
             $check->pdf                     = $path ?? $check->pdf;
             $check->admin_permission        = $request->input("admin_permission");
             $check->messages                = $request->input("messages");

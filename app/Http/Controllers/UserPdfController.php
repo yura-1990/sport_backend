@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreUserPDFRequest;
 use App\Http\Requests\UpdateUserPDFRequest;
+use App\Models\Check;
+use App\Models\User;
 use App\Models\UserPdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -51,10 +53,9 @@ class UserPdfController extends Controller
     public function user_pdf(): \Illuminate\Http\JsonResponse
     {
         try {
-            $userPdf = UserPdf::all();
+            $userPdf = Check::select('id', 'user_id', 'direction_id', 'direction_category_id', 'pdf')->get();
             return response()->json([
-                'status' => 'success',
-                'message' => 'pdf got successfully',
+                'status' => true,
                 'userPdf' => $userPdf,
             ], Response::HTTP_OK);
         }
@@ -123,18 +124,26 @@ class UserPdfController extends Controller
     {
         try {
             $request->validated();
-            $userPDF = new UserPdf;
+
             if ($request->hasFile('pdf')){
+                $getUserPdf = UserPdf::where('direction_category_id', $request->direction_category_id)->first()->pdf ?? null;
+                if ($getUserPdf){
+                    Storage::disk('public')->delete($getUserPdf);
+                }
                 $path = $request->file('pdf')->store('userPDF', 'public');
             }
-            $userPDF->user_id = $request->user_id;
-            $userPDF->direction_category_id = $request->direction_category_id;
-            $userPDF->pdf = $path ?? null;
-            $userPDF->save();
+
+            $userPDF = UserPdf::updateOrCreate(
+                ['direction_category_id'=>$request->direction_category_id],
+                [
+                    'direction_category_id'=>$request->direction_category_id,
+                    'pdf'=>$path
+                ]
+            );
 
             return response()->json([
-                'status' => __('Success'),
-                'message' => __('Data created successfully'),
+                'status' => __('ok'),
+                'message' => __('Data created or updated successfully'),
                 'userPDF' => $userPDF,
             ]);
         }
@@ -198,9 +207,79 @@ class UserPdfController extends Controller
     {
         try {
             return response()->json([
-                'status' => 'success',
+                'status' => 'ok',
                 'userPdf' => $userPdf,
             ], Response::HTTP_OK);
+        }
+        catch (\Exception $e){
+            return
+                response()->json([
+                    'status' => false,
+                    'message' => $e->getMessage(),
+                ]);
+        }
+    }
+
+    /**
+     * @OA\Get(
+     *     path="/api/downloadUserPdf/{user_id}",
+     *     tags={"UserPDF"},
+     *     summary="Get one data from UserPDF database",
+     *     description="Via this link a UserPDF`s data comes to show",
+     *     operationId="downloadUserPdf",
+     *     @OA\Parameter(
+     *         name="Accept-Language",
+     *         in="header",
+     *         description="Set language parameter by typing uz, ru, en",
+     *         @OA\Schema(
+     *             type="string"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="user_id",
+     *         in="path",
+     *         description="ID for userPdf data",
+     *         required=true,
+     *         @OA\Schema(
+     *             type="integer",
+     *             format="int64"
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="successful operation"
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthenticated"
+     *     ),
+     *      @OA\Response(
+     *         response=400,
+     *         description="Invalid status value"
+     *     ),
+     *  )
+     */
+
+    public function downloadUserPdf($user_id): \Symfony\Component\HttpFoundation\BinaryFileResponse
+    {
+        try {
+          /*  $userPDF = User::find($user_id)->check;
+            $data = [];
+            foreach ($userPDF as $pdf){
+                $pdfInfo['direction_category_id'] = $pdf->direction_category_id;
+                $pdfInfo['pdf'] = $pdf->pdf;
+                $data[]=$pdfInfo;
+            }*/
+
+            $getpdf = Check::find($user_id)->pdf;
+            $headers = ['Content-Type: application/pdf'];
+            $fileName = time().'.pdf';
+            return response()->download($getpdf, $fileName,$headers);
+
+           /* return response()->json([
+                'status' => 'ok',
+                'userPDF'=>$getpdf
+            ], Response::HTTP_OK);*/
         }
         catch (\Exception $e){
             return
@@ -287,7 +366,7 @@ class UserPdfController extends Controller
             ]);
 
             return response()->json([
-                'status' => __('Success'),
+                'status' => __('ok'),
                 'message' => __('Data updated successfully'),
                 'userPdf' => $userPdf,
             ]);
@@ -300,6 +379,11 @@ class UserPdfController extends Controller
                 ]);
         }
     }
+
+
+
+
+
 
     /**
      * Remove the specified resource from storage.
@@ -353,7 +437,7 @@ class UserPdfController extends Controller
             Storage::disk('public')->delete($userPdf->pdf);
             $userPdf->delete();
             return response()->json([
-                'status' => __('Success'),
+                'status' => __('ok'),
                 'userPdf'=> $userPdf
             ]);
         }

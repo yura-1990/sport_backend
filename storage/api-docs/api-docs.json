@@ -15,11 +15,225 @@
     },
     "servers": [
         {
-            "url": "http://localhost:8000",
+            "url": "https://sport.napaautomotive.uz/",
+            "description": "Sport api server link"
+        },
+        {
+            "url": "https://sport.napaautomotive.uz/",
             "description": "Sport api server link"
         }
     ],
     "paths": {
+        "/api/admins": {
+            "get": {
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "Get all admin list",
+                "description": "Via this link All admin datas come",
+                "operationId": "admin",
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Invalid status value"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "Create admin",
+                "operationId": "storeAdmin",
+                "requestBody": {
+                    "description": "Input data format",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "login": {
+                                        "description": "Admin login",
+                                        "type": "string",
+                                        "default": "admin"
+                                    },
+                                    "password": {
+                                        "description": "Admin password",
+                                        "type": "string",
+                                        "default": "admin"
+                                    },
+                                    "pnfl": {
+                                        "description": "Admin pnfl",
+                                        "type": "integer",
+                                        "default": 31805911230083
+                                    },
+                                    "pasport_seria": {
+                                        "description": "Admin passport seria",
+                                        "type": "string",
+                                        "default": "AB"
+                                    },
+                                    "pasport_seria_code": {
+                                        "description": "Admin passport number",
+                                        "type": "integer",
+                                        "default": 1234567
+                                    },
+                                    "fillial_id": {
+                                        "description": "Fillial ID number",
+                                        "type": "integer",
+                                        "default": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    }
+                }
+            }
+        },
+        "/api/admins/{user}": {
+            "get": {
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "Get one data",
+                "description": "Get one",
+                "operationId": "showAdmin",
+                "parameters": [
+                    {
+                        "name": "user",
+                        "in": "path",
+                        "description": "ID for user data",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Invalid status value"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "Update",
+                "description": "Update data",
+                "operationId": "update",
+                "parameters": [
+                    {
+                        "name": "user",
+                        "in": "path",
+                        "description": "id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Input data format",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "login": {
+                                        "description": "Admin login",
+                                        "type": "string",
+                                        "default": "admin"
+                                    },
+                                    "password": {
+                                        "description": "Admin password",
+                                        "type": "string",
+                                        "default": "admin"
+                                    },
+                                    "pnfl": {
+                                        "description": "Admin pnfl",
+                                        "type": "integer",
+                                        "default": 31805911230083
+                                    },
+                                    "pasport_seria": {
+                                        "description": "Admin passport seria",
+                                        "type": "string",
+                                        "default": "AB"
+                                    },
+                                    "pasport_seria_code": {
+                                        "description": "Admin passport number",
+                                        "type": "integer",
+                                        "default": 1234567
+                                    },
+                                    "fillial_id": {
+                                        "description": "Admin fillial",
+                                        "type": "integer",
+                                        "default": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "400": {
+                        "description": "Invalid university supplied"
+                    },
+                    "404": {
+                        "description": "university not found"
+                    },
+                    "200": {
+                        "description": "successful operation"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "Deletes",
+                "operationId": "destroyAdmin",
+                "parameters": [
+                    {
+                        "name": "user",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "Invalid course supplied"
+                    },
+                    "404": {
+                        "description": "course not found"
+                    }
+                }
+            }
+        },
         "/api/allData": {
             "get": {
                 "tags": [
@@ -92,13 +306,91 @@
                 }
             }
         },
-        "/api/login": {
+        "/api/allScore": {
+            "get": {
+                "tags": [
+                    "AllScore"
+                ],
+                "summary": "Get all data from fillials database",
+                "description": "Via this link All fillials` datas come",
+                "operationId": "allScore",
+                "parameters": [
+                    {
+                        "name": "Accept-Language",
+                        "in": "header",
+                        "description": "Set language parameter by typing uz, ru, en",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Invalid status value"
+                    }
+                }
+            },
             "post": {
                 "tags": [
-                    "Auth"
+                    "AllScore"
                 ],
-                "summary": "Login the user",
-                "operationId": "login",
+                "summary": "Register a allScore",
+                "operationId": "storeAllScore",
+                "parameters": [
+                    {
+                        "name": "Accept-Language",
+                        "in": "header",
+                        "description": "Set language parameter by typing uz, ru, en",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Input data format",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "direction_id": {
+                                        "description": "direction ID",
+                                        "type": "integer"
+                                    },
+                                    "user_id": {
+                                        "description": "Direction category ID",
+                                        "type": "integer"
+                                    },
+                                    "all_score": {
+                                        "description": "Direction category score",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    }
+                }
+            }
+        },
+        "/api/allScore/{allScore}": {
+            "get": {
+                "tags": [
+                    "AllScore"
+                ],
+                "summary": "Get one data from showAllScore database",
+                "description": "Via this link a showAllScore`s data comes to show",
+                "operationId": "showAllScore",
                 "parameters": [
                     {
                         "name": "Accept-Language",
@@ -108,6 +400,175 @@
                             "type": "string"
                         }
                     },
+                    {
+                        "name": "allScore",
+                        "in": "path",
+                        "description": "ID for avatar data",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Invalid status value"
+                    }
+                }
+            }
+        },
+        "/api/allScore/{allScore}/update": {
+            "put": {
+                "tags": [
+                    "AllScore"
+                ],
+                "summary": "Updated",
+                "description": "Update this AllScore",
+                "operationId": "updateAllScore",
+                "parameters": [
+                    {
+                        "name": "Accept-Language",
+                        "in": "header",
+                        "description": "Set language parameter by typing uz, ru, en",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "allScore",
+                        "in": "path",
+                        "description": "allScore that to be updated",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Input data format",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "all_score": {
+                                        "description": "Direction category score",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "400": {
+                        "description": "Invalid avatar supplied"
+                    },
+                    "404": {
+                        "description": "avatar not found"
+                    },
+                    "200": {
+                        "description": "successful operation"
+                    }
+                }
+            }
+        },
+        "/api/allScore/{allScore}/delete": {
+            "delete": {
+                "tags": [
+                    "AllScore"
+                ],
+                "summary": "Deletes a allScore",
+                "operationId": "destroyAllScore",
+                "parameters": [
+                    {
+                        "name": "Accept-Language",
+                        "in": "header",
+                        "description": "Set language parameter by typing uz, ru, en",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "allScore",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "Invalid course supplied"
+                    },
+                    "404": {
+                        "description": "Avatar not found"
+                    }
+                }
+            }
+        },
+        "/api/allScoreWithUserId/{user_id}": {
+            "get": {
+                "tags": [
+                    "AllScore"
+                ],
+                "summary": "Get one data from showAllScore database",
+                "description": "Via this link a showAllScore`s data comes to show",
+                "operationId": "userScore",
+                "parameters": [
+                    {
+                        "name": "Accept-Language",
+                        "in": "header",
+                        "description": "Set language parameter by typing uz, ru, en",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "user_id",
+                        "in": "path",
+                        "description": "ID for avatar data",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Invalid status value"
+                    }
+                }
+            }
+        },
+        "/api/login": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Login the user",
+                "operationId": "login",
+                "parameters": [
                     {
                         "name": "Accept-Language",
                         "in": "header",
@@ -162,14 +623,6 @@
                         "schema": {
                             "type": "string"
                         }
-                    },
-                    {
-                        "name": "Accept-Language",
-                        "in": "header",
-                        "description": "Set language parameter by typing uz, ru, en",
-                        "schema": {
-                            "type": "string"
-                        }
                     }
                 ],
                 "requestBody": {
@@ -207,14 +660,14 @@
                 }
             }
         },
-        "/api/forgot-password": {
-            "post": {
+        "/api/forgot-password/{pnfl}": {
+            "put": {
                 "tags": [
                     "Auth"
                 ],
                 "summary": "If you forgot password",
                 "description": "Change you password with your email",
-                "operationId": "7af8817e88ba5874543ff38f188248f1",
+                "operationId": "a694edfc1a9fb3cad2eb7ab47a4e8257",
                 "parameters": [
                     {
                         "name": "Accept-Language",
@@ -222,6 +675,16 @@
                         "description": "Set language parameter by typing uz, ru, en",
                         "schema": {
                             "type": "string"
+                        }
+                    },
+                    {
+                        "name": "pnfl",
+                        "in": "path",
+                        "description": "pnfl for resent password",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
                         }
                     }
                 ],
@@ -231,9 +694,13 @@
                         "application/json": {
                             "schema": {
                                 "properties": {
-                                    "email": {
-                                        "description": "enter your email to updated password",
-                                        "type": "email"
+                                    "password": {
+                                        "description": "Type your pasport seria",
+                                        "type": "string"
+                                    },
+                                    "password_confirmation": {
+                                        "description": "Type your pasport seria code",
+                                        "type": "integer"
                                     }
                                 },
                                 "type": "object"
@@ -340,6 +807,47 @@
                     },
                     {
                         "name": "avatar",
+                        "in": "path",
+                        "description": "ID for avatar data",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Invalid status value"
+                    }
+                }
+            }
+        },
+        "/api/avatarByUserId/{user_id}": {
+            "get": {
+                "tags": [
+                    "Avatar"
+                ],
+                "summary": "Get one data from avatarByUserId",
+                "description": "Via this link a avatarByUserId`s data comes to show",
+                "operationId": "showAvatarByUserId",
+                "parameters": [
+                    {
+                        "name": "Accept-Language",
+                        "in": "header",
+                        "description": "Set language parameter by typing uz, ru, en",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "user_id",
                         "in": "path",
                         "description": "ID for avatar data",
                         "required": true,
@@ -518,6 +1026,10 @@
                                         "description": "Direction category ID",
                                         "type": "integer"
                                     },
+                                    "score": {
+                                        "description": "Direction category score",
+                                        "type": "integer"
+                                    },
                                     "user_id": {
                                         "description": "User ID",
                                         "type": "integer"
@@ -592,6 +1104,47 @@
                 }
             }
         },
+        "/api/downloadPdf/{check_id}": {
+            "get": {
+                "tags": [
+                    "Check"
+                ],
+                "summary": "Get one data from UserPDF database",
+                "description": "Via this link a UserPDF`s data comes to show",
+                "operationId": "downloadPdf",
+                "parameters": [
+                    {
+                        "name": "Accept-Language",
+                        "in": "header",
+                        "description": "Set language parameter by typing uz, ru, en",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "check_id",
+                        "in": "path",
+                        "description": "ID for userPdf data",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Invalid status value"
+                    }
+                }
+            }
+        },
         "/api/check/{check}/update": {
             "post": {
                 "tags": [
@@ -629,6 +1182,10 @@
                                     "direction_category_name": {
                                         "description": "Direction category name",
                                         "type": "string"
+                                    },
+                                    "score": {
+                                        "description": "score",
+                                        "type": "integer"
                                     },
                                     "pdf": {
                                         "description": "upload any pdf file",
@@ -679,6 +1236,265 @@
                     },
                     {
                         "name": "check",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "Invalid course supplied"
+                    },
+                    "404": {
+                        "description": "Avatar not found"
+                    }
+                }
+            }
+        },
+        "/api/checkUser": {
+            "get": {
+                "tags": [
+                    "CheckUser"
+                ],
+                "summary": "Get all data from checkUser database",
+                "description": "Via this link All checkUser` datas come",
+                "operationId": "checkUser",
+                "parameters": [
+                    {
+                        "name": "Accept-Language",
+                        "in": "header",
+                        "description": "Set language parameter by typing uz, ru, en",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Invalid status value"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "CheckUser"
+                ],
+                "summary": "Register a pasport",
+                "operationId": "storeCheckUser",
+                "parameters": [
+                    {
+                        "name": "Accept-Language",
+                        "in": "header",
+                        "description": "Set language parameter by typing uz, ru, en",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Input data format",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "user_id": {
+                                        "description": "type user id",
+                                        "type": "integer"
+                                    },
+                                    "permission": {
+                                        "description": "permission of one of an Admin",
+                                        "type": "string"
+                                    },
+                                    "message": {
+                                        "description": "message of one of an Admin",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    }
+                }
+            }
+        },
+        "/api/checkUser/{checkUser}": {
+            "get": {
+                "tags": [
+                    "CheckUser"
+                ],
+                "summary": "Get one data from CheckUser database",
+                "description": "Via this link a CheckUser`s data comes to show",
+                "operationId": "showCheckUser",
+                "parameters": [
+                    {
+                        "name": "Accept-Language",
+                        "in": "header",
+                        "description": "Set language parameter by typing uz, ru, en",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "checkUser",
+                        "in": "path",
+                        "description": "ID for checkUser data",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Invalid status value"
+                    }
+                }
+            }
+        },
+        "/api/checkUserById/{user_id}": {
+            "get": {
+                "tags": [
+                    "CheckUser"
+                ],
+                "summary": "Get one data from CheckUser database",
+                "description": "Via this link a CheckUser`s data comes to show",
+                "operationId": "getCheckUser",
+                "parameters": [
+                    {
+                        "name": "Accept-Language",
+                        "in": "header",
+                        "description": "Set language parameter by typing uz, ru, en",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "user_id",
+                        "in": "path",
+                        "description": "ID for user id data",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Invalid status value"
+                    }
+                }
+            }
+        },
+        "/api/checkUser/{checkUser}/update": {
+            "put": {
+                "tags": [
+                    "CheckUser"
+                ],
+                "summary": "Updated",
+                "description": "Update this checkUser",
+                "operationId": "updateCheckUser",
+                "parameters": [
+                    {
+                        "name": "Accept-Language",
+                        "in": "header",
+                        "description": "Set language parameter by typing uz, ru, en",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "checkUser",
+                        "in": "path",
+                        "description": "checkUser that to be updated",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Input data format",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "permission": {
+                                        "description": "permission of one of an Admin",
+                                        "type": "string"
+                                    },
+                                    "message": {
+                                        "description": "massege of one of an Admin",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "400": {
+                        "description": "Invalid avatar supplied"
+                    },
+                    "404": {
+                        "description": "avatar not found"
+                    },
+                    "200": {
+                        "description": "successful operation"
+                    }
+                }
+            }
+        },
+        "/api/checkUser/{checkUser}/delete": {
+            "delete": {
+                "tags": [
+                    "CheckUser"
+                ],
+                "summary": "Deletes a checkUser",
+                "operationId": "destroyCheckUser",
+                "parameters": [
+                    {
+                        "name": "Accept-Language",
+                        "in": "header",
+                        "description": "Set language parameter by typing uz, ru, en",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "checkUser",
                         "in": "path",
                         "required": true,
                         "schema": {
@@ -1360,6 +2176,389 @@
                 }
             }
         },
+        "/api/educationname": {
+            "get": {
+                "tags": [
+                    "EducationName"
+                ],
+                "summary": "Get all data from EducationName database",
+                "description": "Via this link All EducationNames` datas come",
+                "operationId": "educationName",
+                "parameters": [
+                    {
+                        "name": "Accept-Language",
+                        "in": "header",
+                        "description": "Set language parameter by typing uz, ru, en",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Invalid status value"
+                    }
+                }
+            }
+        },
+        "/api/evaluate/{user_id}": {
+            "get": {
+                "tags": [
+                    "Evaluate"
+                ],
+                "summary": "Get all data from evaluate database",
+                "description": "Via this link All evaluate` datas come",
+                "operationId": "evaluate",
+                "parameters": [
+                    {
+                        "name": "Accept-Language",
+                        "in": "header",
+                        "description": "Set language parameter by typing uz, ru, en",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "user_id",
+                        "in": "path",
+                        "description": "user_id for check data",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Invalid status value"
+                    }
+                }
+            }
+        },
+        "/api/evaluateCheck/{check_id}/update": {
+            "post": {
+                "tags": [
+                    "Evaluate"
+                ],
+                "summary": "Updated",
+                "description": "Update this check",
+                "operationId": "updateEvaluateChecks",
+                "parameters": [
+                    {
+                        "name": "Accept-Language",
+                        "in": "header",
+                        "description": "Set language parameter by typing uz, ru, en",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "check_id",
+                        "in": "path",
+                        "description": "avatar that to be updated",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Input data format",
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "score": {
+                                        "description": "score",
+                                        "type": "string"
+                                    },
+                                    "admin_permission": {
+                                        "description": "Permission of one of an Admin",
+                                        "type": "string"
+                                    },
+                                    "messages": {
+                                        "description": "message of one of an Admin",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "400": {
+                        "description": "Invalid avatar supplied"
+                    },
+                    "404": {
+                        "description": "avatar not found"
+                    },
+                    "200": {
+                        "description": "successful operation"
+                    }
+                }
+            }
+        },
+        "/api/direction_user/{direction_id}": {
+            "get": {
+                "tags": [
+                    "Evaluate"
+                ],
+                "summary": "Get all data from evaluate database",
+                "description": "Via this link All evaluate` datas come",
+                "operationId": "countDirectionUser",
+                "parameters": [
+                    {
+                        "name": "Accept-Language",
+                        "in": "header",
+                        "description": "Set language parameter by typing uz, ru, en",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "direction_id",
+                        "in": "path",
+                        "description": "direction_id for check data",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Invalid status value"
+                    }
+                }
+            }
+        },
+        "/api/direction_with_user/{direction_id}": {
+            "get": {
+                "tags": [
+                    "Evaluate"
+                ],
+                "summary": "Get all data from evaluate database",
+                "description": "Via this link All evaluate` datas come",
+                "operationId": "directionWithUser",
+                "parameters": [
+                    {
+                        "name": "Accept-Language",
+                        "in": "header",
+                        "description": "Set language parameter by typing uz, ru, en",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "direction_id",
+                        "in": "path",
+                        "description": "direction_id for check data",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Invalid status value"
+                    }
+                }
+            }
+        },
+        "/api/userInfo/{direction_id}/export": {
+            "get": {
+                "tags": [
+                    "Evaluate"
+                ],
+                "summary": "Get all user list in excel file",
+                "description": "Returns file",
+                "operationId": "userInfoExport",
+                "parameters": [
+                    {
+                        "name": "Accept-Language",
+                        "in": "header",
+                        "description": "Set language parameter by typing uz, ru, en",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "direction_id",
+                        "in": "path",
+                        "description": "direction_id for check data",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Invalid status value"
+                    }
+                }
+            }
+        },
+        "/api/oneUserInfo/{user_id}/export": {
+            "get": {
+                "tags": [
+                    "Evaluate"
+                ],
+                "summary": "Get all user list in excel file",
+                "description": "Returns file",
+                "operationId": "oneUserInfo",
+                "parameters": [
+                    {
+                        "name": "Accept-Language",
+                        "in": "header",
+                        "description": "Set language parameter by typing uz, ru, en",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "user_id",
+                        "in": "path",
+                        "description": "user id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Invalid status value"
+                    }
+                }
+            }
+        },
+        "/api/user_in_direction/{user_id}": {
+            "get": {
+                "tags": [
+                    "Evaluate"
+                ],
+                "summary": "Get all data from evaluate database",
+                "description": "Via this link All evaluate` datas come",
+                "operationId": "userInDirection",
+                "parameters": [
+                    {
+                        "name": "Accept-Language",
+                        "in": "header",
+                        "description": "Set language parameter by typing uz, ru, en",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "user_id",
+                        "in": "path",
+                        "description": "user_id for check data",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Invalid status value"
+                    }
+                }
+            }
+        },
+        "/api/downloadpdf/{user_id}": {
+            "get": {
+                "tags": [
+                    "Evaluate"
+                ],
+                "summary": "Get all data from evaluate database",
+                "description": "Via this link All evaluate` datas come",
+                "operationId": "download",
+                "parameters": [
+                    {
+                        "name": "Accept-Language",
+                        "in": "header",
+                        "description": "Set language parameter by typing uz, ru, en",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "user_id",
+                        "in": "path",
+                        "description": "user_id for check data",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Invalid status value"
+                    }
+                }
+            }
+        },
         "/api/filial": {
             "get": {
                 "tags": [
@@ -1375,6 +2574,275 @@
                         "description": "Set language parameter by typing uz, ru, en",
                         "schema": {
                             "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Invalid status value"
+                    }
+                }
+            }
+        },
+        "/api/home-pages": {
+            "get": {
+                "tags": [
+                    "HomePage"
+                ],
+                "summary": "Get all home page list",
+                "description": "Via this link All home page datas come",
+                "operationId": "homePage",
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Invalid status value"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "HomePage"
+                ],
+                "description": "Save home page data",
+                "operationId": "storeHomePage",
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "photo": {
+                                        "description": "file to upload",
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "video": {
+                                        "description": "Video link",
+                                        "type": "string"
+                                    },
+                                    "photo_text": {
+                                        "description": "Photo text",
+                                        "type": "string"
+                                    },
+                                    "status": {
+                                        "description": "Status",
+                                        "type": "integer"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                }
+            }
+        },
+        "/api/home-pages/{id}": {
+            "get": {
+                "tags": [
+                    "HomePage"
+                ],
+                "summary": "Get home page",
+                "description": "Via this link Home page",
+                "operationId": "getHomePage",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID for homePage data",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Invalid status value"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "HomePage"
+                ],
+                "description": "Update home page data",
+                "operationId": "updateHomePage",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID for homePage data",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "photo": {
+                                        "description": "file to upload",
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "video": {
+                                        "description": "Video link",
+                                        "type": "string"
+                                    },
+                                    "photo_text": {
+                                        "description": "Photo text",
+                                        "type": "string"
+                                    },
+                                    "status": {
+                                        "description": "Status",
+                                        "type": "integer"
+                                    },
+                                    "_method": {
+                                        "description": "Method (Send always PUT)",
+                                        "type": "string",
+                                        "default": "PUT"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "HomePage"
+                ],
+                "summary": "Delete home page",
+                "description": "Delete home page",
+                "operationId": "deletePage",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID for homePage data",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Invalid status value"
+                    }
+                }
+            }
+        },
+        "/api/notifications": {
+            "get": {
+                "tags": [
+                    "Notification"
+                ],
+                "summary": "Get all notification list",
+                "description": "Returns list of notifications by auth id",
+                "operationId": "notification",
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Invalid status value"
+                    }
+                }
+            }
+        },
+        "/api/notifications/all": {
+            "get": {
+                "tags": [
+                    "Notification"
+                ],
+                "summary": "Get all notification list",
+                "description": "Returns list of notifications",
+                "operationId": "notifications",
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Invalid status value"
+                    }
+                }
+            }
+        },
+        "/api/notifications/{id}": {
+            "get": {
+                "tags": [
+                    "Notification"
+                ],
+                "summary": "Get one data",
+                "description": "Get one",
+                "operationId": "showNotification",
+                "parameters": [
+                    {
+                        "name": "user",
+                        "in": "path",
+                        "description": "ID for notification data",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
                         }
                     }
                 ],
@@ -1853,7 +3321,7 @@
                         }
                     },
                     {
-                        "name": "personal",
+                        "name": "personalInfo",
                         "in": "path",
                         "required": true,
                         "schema": {
@@ -1871,6 +3339,265 @@
                     },
                     "404": {
                         "description": "personal not found"
+                    }
+                }
+            }
+        },
+        "/api/portfolioUser": {
+            "get": {
+                "tags": [
+                    "PortfolioUser"
+                ],
+                "summary": "Get all data from PortfolioUser database",
+                "description": "Via this link All PortfolioUser` datas come",
+                "operationId": "portfolioUser",
+                "parameters": [
+                    {
+                        "name": "Accept-Language",
+                        "in": "header",
+                        "description": "Set language parameter by typing uz, ru, en",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Invalid status value"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "PortfolioUser"
+                ],
+                "summary": "portfolio check User",
+                "operationId": "storePortfolioUser",
+                "parameters": [
+                    {
+                        "name": "Accept-Language",
+                        "in": "header",
+                        "description": "Set language parameter by typing uz, ru, en",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Input data format",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "user_id": {
+                                        "description": "type user id",
+                                        "type": "integer"
+                                    },
+                                    "permission": {
+                                        "description": "permission of one of an Admin",
+                                        "type": "string"
+                                    },
+                                    "message": {
+                                        "description": "message of one of an Admin",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    }
+                }
+            }
+        },
+        "/api/portfolioUser/{portfolioUser}": {
+            "get": {
+                "tags": [
+                    "PortfolioUser"
+                ],
+                "summary": "Get one data from showPortfolioUser database",
+                "description": "Via this link a showPortfolioUser`s data comes to show",
+                "operationId": "showPortfolioUser",
+                "parameters": [
+                    {
+                        "name": "Accept-Language",
+                        "in": "header",
+                        "description": "Set language parameter by typing uz, ru, en",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "portfolioUser",
+                        "in": "path",
+                        "description": "ID for portfolioUser data",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Invalid status value"
+                    }
+                }
+            }
+        },
+        "/api/portfolioUserById/{user_id}": {
+            "get": {
+                "tags": [
+                    "PortfolioUser"
+                ],
+                "summary": "Get one data from showPortfolioUser database",
+                "description": "Via this link a showPortfolioUser`s data comes to show",
+                "operationId": "getPortfolioUser",
+                "parameters": [
+                    {
+                        "name": "Accept-Language",
+                        "in": "header",
+                        "description": "Set language parameter by typing uz, ru, en",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "user_id",
+                        "in": "path",
+                        "description": "ID for portfolioUser data",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Invalid status value"
+                    }
+                }
+            }
+        },
+        "/api/portfolioUser/{portfolioUser}/update": {
+            "put": {
+                "tags": [
+                    "PortfolioUser"
+                ],
+                "summary": "Updated",
+                "description": "Update this PortfolioUser",
+                "operationId": "updatePortfolioUser",
+                "parameters": [
+                    {
+                        "name": "Accept-Language",
+                        "in": "header",
+                        "description": "Set language parameter by typing uz, ru, en",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "portfolioUser",
+                        "in": "path",
+                        "description": "PortfolioUser that to be updated",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Input data format",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "permission": {
+                                        "description": "permission of one of an Admin",
+                                        "type": "string"
+                                    },
+                                    "message": {
+                                        "description": "massege of one of an Admin",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "400": {
+                        "description": "Invalid avatar supplied"
+                    },
+                    "404": {
+                        "description": "avatar not found"
+                    },
+                    "200": {
+                        "description": "successful operation"
+                    }
+                }
+            }
+        },
+        "/api/portfolioUser/{portfolioUser}/delete": {
+            "delete": {
+                "tags": [
+                    "PortfolioUser"
+                ],
+                "summary": "Deletes a PortfolioUser",
+                "operationId": "destroyPortfolioUser",
+                "parameters": [
+                    {
+                        "name": "Accept-Language",
+                        "in": "header",
+                        "description": "Set language parameter by typing uz, ru, en",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "portfolioUser",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "Invalid course supplied"
+                    },
+                    "404": {
+                        "description": "Avatar not found"
                     }
                 }
             }
@@ -1902,6 +3629,265 @@
                     },
                     "400": {
                         "description": "Invalid status value"
+                    }
+                }
+            }
+        },
+        "/api/statisticUser": {
+            "get": {
+                "tags": [
+                    "StatisticUser"
+                ],
+                "summary": "Get all data from StatisticUser database",
+                "description": "Via this link All StatisticUser` datas come",
+                "operationId": "statisticUser",
+                "parameters": [
+                    {
+                        "name": "Accept-Language",
+                        "in": "header",
+                        "description": "Set language parameter by typing uz, ru, en",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Invalid status value"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "StatisticUser"
+                ],
+                "summary": "Register a pasport",
+                "operationId": "storeStatisticUser",
+                "parameters": [
+                    {
+                        "name": "Accept-Language",
+                        "in": "header",
+                        "description": "Set language parameter by typing uz, ru, en",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Input data format",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "user_id": {
+                                        "description": "type user id",
+                                        "type": "integer"
+                                    },
+                                    "permission": {
+                                        "description": "permission of one of an Admin",
+                                        "type": "string"
+                                    },
+                                    "message": {
+                                        "description": "message of one of an Admin",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    }
+                }
+            }
+        },
+        "/api/statisticUser/{statisticUser}": {
+            "get": {
+                "tags": [
+                    "StatisticUser"
+                ],
+                "summary": "Get one data from showStatisticUser database",
+                "description": "Via this link a showStatisticUser`s data comes to show",
+                "operationId": "showStatisticUser",
+                "parameters": [
+                    {
+                        "name": "Accept-Language",
+                        "in": "header",
+                        "description": "Set language parameter by typing uz, ru, en",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "statisticUser",
+                        "in": "path",
+                        "description": "ID for checkUser data",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Invalid status value"
+                    }
+                }
+            }
+        },
+        "/api/statisticUserById/{user_id}": {
+            "get": {
+                "tags": [
+                    "StatisticUser"
+                ],
+                "summary": "Get one data from showStatisticUser database",
+                "description": "Via this link a showStatisticUser`s data comes to show",
+                "operationId": "getStatisticUser",
+                "parameters": [
+                    {
+                        "name": "Accept-Language",
+                        "in": "header",
+                        "description": "Set language parameter by typing uz, ru, en",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "user_id",
+                        "in": "path",
+                        "description": "ID for checkUser data",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Invalid status value"
+                    }
+                }
+            }
+        },
+        "/api/statisticUser/{statisticUser}/update": {
+            "put": {
+                "tags": [
+                    "StatisticUser"
+                ],
+                "summary": "Updated",
+                "description": "Update this statisticUser",
+                "operationId": "updateStatisticUser",
+                "parameters": [
+                    {
+                        "name": "Accept-Language",
+                        "in": "header",
+                        "description": "Set language parameter by typing uz, ru, en",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "statisticUser",
+                        "in": "path",
+                        "description": "StatisticUser that to be updated",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Input data format",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "permission": {
+                                        "description": "permission of one of an Admin",
+                                        "type": "string"
+                                    },
+                                    "message": {
+                                        "description": "massege of one of an Admin",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "400": {
+                        "description": "Invalid avatar supplied"
+                    },
+                    "404": {
+                        "description": "avatar not found"
+                    },
+                    "200": {
+                        "description": "successful operation"
+                    }
+                }
+            }
+        },
+        "/api/statisticUser/{statisticUser}/delete": {
+            "delete": {
+                "tags": [
+                    "StatisticUser"
+                ],
+                "summary": "Deletes a statisticUser",
+                "operationId": "destroyStatisticUser",
+                "parameters": [
+                    {
+                        "name": "Accept-Language",
+                        "in": "header",
+                        "description": "Set language parameter by typing uz, ru, en",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "statisticUser",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "Invalid course supplied"
+                    },
+                    "404": {
+                        "description": "Avatar not found"
                     }
                 }
             }
@@ -2322,6 +4308,84 @@
                 }
             }
         },
+        "/api/users": {
+            "get": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Get all user list",
+                "description": "Via this link All user datas come",
+                "operationId": "user",
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Invalid status value"
+                    }
+                }
+            }
+        },
+        "/api/users/export": {
+            "get": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Get all user list in excel file",
+                "description": "Returns file",
+                "operationId": "userExport",
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Invalid status value"
+                    }
+                }
+            }
+        },
+        "/api/users/import": {
+            "post": {
+                "tags": [
+                    "User"
+                ],
+                "description": "Import user files from excel",
+                "operationId": "userImport",
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "file": {
+                                        "description": "file to upload",
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                }
+            }
+        },
         "/api/userPdf": {
             "get": {
                 "tags": [
@@ -2418,6 +4482,47 @@
                     },
                     {
                         "name": "userPdf",
+                        "in": "path",
+                        "description": "ID for userPdf data",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Invalid status value"
+                    }
+                }
+            }
+        },
+        "/api/downloadUserPdf/{user_id}": {
+            "get": {
+                "tags": [
+                    "UserPDF"
+                ],
+                "summary": "Get one data from UserPDF database",
+                "description": "Via this link a UserPDF`s data comes to show",
+                "operationId": "downloadUserPdf",
+                "parameters": [
+                    {
+                        "name": "Accept-Language",
+                        "in": "header",
+                        "description": "Set language parameter by typing uz, ru, en",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "user_id",
                         "in": "path",
                         "description": "ID for userPdf data",
                         "required": true,
@@ -2814,6 +4919,37 @@
                     },
                     "404": {
                         "description": "course not found"
+                    }
+                }
+            }
+        },
+        "/api/workplace": {
+            "get": {
+                "tags": [
+                    "WorkPlace"
+                ],
+                "summary": "Get all data from workplace database",
+                "description": "Via this link All workplaces` datas come",
+                "operationId": "workPlace",
+                "parameters": [
+                    {
+                        "name": "Accept-Language",
+                        "in": "header",
+                        "description": "Set language parameter by typing uz, ru, en",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Invalid status value"
                     }
                 }
             }

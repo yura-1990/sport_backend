@@ -3,13 +3,14 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Auth\Passwords\CanResetPassword;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-/*use Illuminate\Contracts\Auth\CanResetPassword;*/
-use Illuminate\Auth\Passwords\CanResetPassword;
-use Laravel\Sanctum\HasApiTokens;
 use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
+
+/*use Illuminate\Contracts\Auth\CanResetPassword;*/
 
 
 class User extends Authenticatable implements JWTSubject
@@ -68,45 +69,85 @@ class User extends Authenticatable implements JWTSubject
         return [];
     }
 
-    public function directions()
+    public function scopeIsAdmin(Builder $query)
     {
-        return $this->belongsToMany(Direction::class, 'direction_user');
+        return $query->whereHas('role', function ($query) {
+            return $query->where('type', 'admin');
+        });
     }
 
-    public function personalInfo(){
+    public function directions()
+    {
+        return $this->belongsToMany(Direction::class, 'checks')->distinct();
+    }
+
+    public function personalInfo()
+    {
         return $this->hasOne(PersonalInfo::class);
     }
 
-    public function pasport(){
+    public function pasport()
+    {
         return $this->belongsTo(Pasport::class);
     }
 
-     public function education(){
+    public function education()
+    {
         return $this->hasMany(Education::class);
     }
 
-    public function fillial(){
+    public function fillial()
+    {
         return $this->belongsTo(Fillial::class);
     }
 
-    public function work(){
+    public function work()
+    {
         return $this->hasMany(Work::class);
     }
 
+    public function portfolioUser()
+    {
+        return $this->hasMany(PortfolioUser::class);
+    }
 
-    public function training(){
+    public function statisticUser()
+    {
+        return $this->hasMany(StatisticUser::class);
+    }
+
+    public function training()
+    {
         return $this->hasMany(Training::class);
     }
 
-    public function avatar(){
+    public function avatar()
+    {
         return $this->hasOne(Avatar::class);
     }
 
-    public function userPdf(){
+    public function userPdf()
+    {
         return $this->hasMany(UserPdf::class);
     }
 
-    public function check(){
+    public function check()
+    {
         return $this->hasMany(Check::class);
+    }
+
+    public function allScore()
+    {
+        return $this->hasMany(AllScore::class);
+    }
+
+    public function checkUser()
+    {
+        return $this->hasMany(CheckUser::class);
+    }
+
+    public function role()
+    {
+        return $this->belongsTo(Role::class);
     }
 }

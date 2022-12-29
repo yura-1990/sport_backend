@@ -1,7 +1,10 @@
 <?php
 
+use App\Models\Check;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FirebaseController;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Storage;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,6 +20,19 @@ use App\Http\Controllers\FirebaseController;
 Route::get('/', function () {
     return view('welcome');
 });
+Route::get('/storage-link', function () {
+    Artisan::call('storage:link');
+});
+
+Route::get('/file-download/{id}', function ($id) {
+    $getpdf = Check::find($id)->pdf;
+    $file=Storage::url($getpdf);
+    $headers = ['Content-Type: application/pdf'];
+    $fileName = time().'.pdf';
+    return response()->download(public_path($file));
+});
+
+
 
 Route::get('firebase-phone-authentication', [FirebaseController::class, 'index']);
 

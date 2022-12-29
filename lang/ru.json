@@ -6,5 +6,8 @@
     "Click here to reset your password": "Нажмите здесь, чтобы сбросить пароль",
     "New Password": "Новый пароль",
     "Submit": "Отправить",
-    "404 page not found": "404 Страница не найдена"
+    "404 page not found": "404 Страница не найдена",
+    "Dashboard": "Панель управления",
+    "Your pnfl is not match with the entering data" :"Ваш pnfl не соответствует введенным данным",
+    "This data is not in our list": "Этих данных нет в нашем списке"
 }

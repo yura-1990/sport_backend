@@ -17,9 +17,30 @@ class UserSeeder extends Seeder
     public function run()
     {
         DB::table('users')->insert([
-            'login' => 'supper_admin_of_sport_institude',
-            'password' => Hash::make('supperpassswordofsportinstitude'),
+            'login' => 'supper_admin',
+            'password' => Hash::make('supperpasssword'),
             'role_id' => 1,
+            'fillial_id'=> 1,
+            'pasport_id'=>1
+        ]);
+        DB::table('users')->insert([
+            'login' => 'samarqand_admin',
+            'password' => Hash::make('samarqand_admin'),
+            'role_id' => 2,
+            'fillial_id'=> 1,
+            'pasport_id'=>1
+        ]);
+        DB::table('users')->insert([
+            'login' => 'navoi_admin',
+            'password' => Hash::make('navoi_admin'),
+            'role_id' => 2,
+            'fillial_id'=> 1,
+            'pasport_id'=>1
+        ]);
+        DB::table('users')->insert([
+            'login' => 'fargana_admin',
+            'password' => Hash::make('fargana_admin'),
+            'role_id' => 2,
             'fillial_id'=> 1,
             'pasport_id'=>1
         ]);

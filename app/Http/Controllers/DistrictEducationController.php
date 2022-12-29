@@ -42,7 +42,7 @@ class DistrictEducationController extends Controller
     {
         $districtEducation = DistrictEducation::all();
         return response()->json([
-            'status' => 'success',
+            'status' => 'ok',
             'message' => 'DistrictEducation comes successfully',
             'districtEducation' => $districtEducation,
         ]);
@@ -97,7 +97,7 @@ class DistrictEducationController extends Controller
         ]);
 
         return response()->json([
-            'status' => 'success',
+            'status' => 'ok',
             'message' => 'districtEducation created successfully',
             'districtEducation' => $districtEducation,
         ]);
@@ -145,7 +145,7 @@ class DistrictEducationController extends Controller
     public function showDistrictEducation(DistrictEducation $districtEducation)
     {
         return response()->json([
-            'status' => 'success',
+            'status' => 'ok',
             'districtEducation' => $districtEducation,
         ]);
     }
@@ -218,7 +218,7 @@ class DistrictEducationController extends Controller
         ]);
 
         return response()->json([
-            'status' => 'success',
+            'status' => 'ok',
             'message' => 'DistrictEducation updated successfully',
             'districtEducation' => $districtEducation,
         ]);
@@ -265,7 +265,7 @@ class DistrictEducationController extends Controller
     {
         $districtEducation->delete();
         return response()->json([
-            'status' => 'success',
+            'status' => 'ok',
             'message' => 'District Education deleted successfully',
             'districtEducation' => $districtEducation,
         ]);

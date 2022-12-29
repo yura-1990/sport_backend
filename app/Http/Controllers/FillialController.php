@@ -46,7 +46,7 @@ class FillialController extends Controller
         try {
             $filial = Fillial::select('id', LocaleTrait::convert('name'))->get();
             return response()->json([
-                'status' => __('Success'),
+                'status' => __('ok'),
                 'filial' => $filial
             ], Response::HTTP_OK);
         }

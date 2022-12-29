@@ -7,7 +7,7 @@ use App\Http\Requests\UpdatePosportRequest;
 use App\Models\Pasport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
-    use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Response;
 
 class PasportController extends Controller
 {
@@ -53,7 +53,7 @@ class PasportController extends Controller
         try {
             $pasports = Pasport::all();
             return response()->json([
-                'status' => __('Success'),
+                'status' => __('ok'),
                 'local'=> App::getLocale(),
                 'Message' => __('Data created successfully'),
                 'pasports' => $pasports,
@@ -123,19 +123,29 @@ class PasportController extends Controller
     public function storePasport(StorePosportRequest $request)
     {
 
+        $pasport = Pasport::where('pnfl', $request->pnfl)->first();
+
         try {
             $request->validated();
-            $pasport = Pasport::create([
-                'pnfl' => $request->pnfl,
-                'pasport_seria'=>$request->pasport_seria,
-                'pasport_seria_code' => $request->pasport_seria_code,
-            ]);
-            return response()->json([
-                'status' => __('Success'),
-                'local'=> App::getLocale(),
-                'Message' => __('Data created successfully'),
-                'pasport' => $pasport,
-            ],Response::HTTP_OK);
+
+            if ($pasport){
+                $pasport->pnfl= $request->pnfl;
+                $pasport->pasport_seria=$request->pasport_seria;
+                $pasport->pasport_seria_code = $request->pasport_seria_code;
+                $pasport->save();
+                return response()->json([
+                    'status' => __('ok'),
+                    'local'=> App::getLocale(),
+                    'Message' => __('Data created successfully'),
+                    'pasport' => $pasport,
+                ],Response::HTTP_OK);
+            }else{
+                return response()->json([
+                    'status' => false,
+                    'Message' => __("This data is not in our list "),
+                    'pasport' => $pasport,
+                ],Response::HTTP_OK);
+            }
         }
         catch (\Exception $e){
             return
@@ -197,7 +207,7 @@ class PasportController extends Controller
     {
         try {
             return response()->json([
-                'status' => __('Success'),
+                'status' => __('ok'),
                 'test'=> __('Data updated successfully'),
                 'local'=> App::getLocale(),
                 'pasport' => $pasport,
@@ -295,7 +305,7 @@ class PasportController extends Controller
             ]);
 
             return response()->json([
-                'status' => __('Success'),
+                'status' => __('ok'),
                 'local'=> App::getLocale(),
                 'message' => __('Data updated successfully'),
                 'pasport' => $pasport,
@@ -361,7 +371,7 @@ class PasportController extends Controller
         try {
             $pasport->delete();
             return response()->json([
-                'status' => 'success',
+                'status' => 'ok',
                 'message' => __('Pasport deleted successfully'),
                 'pasport' => $pasport,
             ],Response::HTTP_OK);

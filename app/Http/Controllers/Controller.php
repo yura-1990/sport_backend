@@ -26,12 +26,31 @@ use Illuminate\Routing\Controller as BaseController;
  *
  * @OA\Server(
  *     description="Sport api server link",
- *     url="http://localhost:8000"
+ *     url="https://sport.napaautomotive.uz/"
+ * )
+ * @OA\Server(
+ *     description="Sport api server link",
+ *     url="https://sport.napaautomotive.uz/"
  * )
  */
-
-
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+
+    public function success($data = [], $message = '')
+    {
+        return response()->json([
+            'status' => 'ok',
+            'message' => $message,
+            'data' => $data,
+        ]);
+    }
+
+    public function error($message, $code = 500)
+    {
+        return response()->json([
+            'status' => false,
+            'message' => $message
+        ], $code);
+    }
 }

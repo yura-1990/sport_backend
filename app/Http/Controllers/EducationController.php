@@ -54,9 +54,9 @@ class EducationController extends Controller
     public function education()
     {
         try {
-            $educations = Education::select('id', 'user_id', 'region_id', 'enter_date', 'end_date', LocaleTrait::convert('education_name'), LocaleTrait::convert('specialization'))->get();
+            $educations = Education::get();
             return response()->json([
-                'status' =>  __('Success'),
+                'status' =>  __('ok'),
                 'educations' => $educations,
             ],Response::HTTP_OK);
         }
@@ -141,8 +141,8 @@ class EducationController extends Controller
         try {
             $request->validated();
             $education = new Education;
-            $education[LocaleTrait::convert('education_name')] = $request->education_name;
-            $education[LocaleTrait::convert('specialization')] = $request->education_name;
+            $education['education_name'] = $request->education_name;
+            $education['specialization'] = $request->education_name;
             $education['user_id'] = $request->user_id;
             $education['region_id'] = $request->region_id;
             $education['enter_date'] = $request->enter_date;
@@ -150,7 +150,7 @@ class EducationController extends Controller
             $education->save();
 
             return response()->json([
-                'status' => __('Success'),
+                'status' => __('ok'),
                 'message' => __('Data created successfully'),
                 'education' => $education,
             ], Response::HTTP_OK);
@@ -215,7 +215,7 @@ class EducationController extends Controller
     {
         try {
             return response()->json([
-                'status' => 'success',
+                'status' => 'ok',
                 'education' => $education,
             ]);
         }
@@ -329,7 +329,7 @@ class EducationController extends Controller
             ]);
 
             return response()->json([
-                'status' => 'success',
+                'status' => 'ok',
                 'message' => 'Education updated successfully',
                 'education' => $education,
             ]);
@@ -393,7 +393,7 @@ class EducationController extends Controller
         try {
             $education->delete();
             return response()->json([
-                'status' => 'success',
+                'status' => 'ok',
                 'message' => 'Education deleted successfully',
                 'education' => $education,
             ]);
