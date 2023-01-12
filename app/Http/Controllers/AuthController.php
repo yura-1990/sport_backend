@@ -22,10 +22,10 @@ use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth:api', ['except' => ['login','register','editAuth','updateAuth','forgotPassword','resetPasswordLoad','resetPassword',]]);
-    }
+//    public function __construct()
+//    {
+//        $this->middleware('auth:api', ['except' => ['login','register','editAuth','updateAuth','forgotPassword','resetPasswordLoad','resetPassword',]]);
+//    }
 
     /**
      * @OA\Post(

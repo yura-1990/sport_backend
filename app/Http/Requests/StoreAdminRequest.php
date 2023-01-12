@@ -13,6 +13,7 @@ class StoreAdminRequest extends FormRequest
      */
     public function authorize()
     {
+
         return true;
     }
 

@@ -245,7 +245,7 @@ class EvaluateController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/api/direction_with_user/{direction_id}",
+     *     path="/api/direction_with_user/{direction_id}/{fillial_id}",
      *     tags={"Evaluate"},
      *     summary="Get all data from evaluate database",
      *     description="Via this link All evaluate` datas come",
@@ -268,6 +268,16 @@ class EvaluateController extends Controller
      *             format="int64"
      *         )
      *     ),
+     *     @OA\Parameter(
+     *         name="fillial_id",
+     *         in="path",
+     *         description="fillial_id for check data",
+     *         required=true,
+     *         @OA\Schema(
+     *             type="integer",
+     *             format="int64"
+     *         )
+     *     ),
      *     @OA\Response(
      *         response=200,
      *         description="successful operation"
@@ -283,7 +293,7 @@ class EvaluateController extends Controller
      *  )
      */
 
-    public function directionWithUser($direction_id): \Illuminate\Http\JsonResponse
+    public function directionWithUser($direction_id, $fillial_id=null): \Illuminate\Http\JsonResponse
     {
         try {
             $direction_user = Check::where('direction_id',$direction_id)->get();
@@ -291,37 +301,41 @@ class EvaluateController extends Controller
 
             $data = [];
             $passport_info = [];
-            $users=[];
-            foreach ($direction_user as $user){
-                $getUser = User::find($user->user->id)->check;
-                $result=0;
-                foreach ($getUser as $score){
-                    $result += $score->score;
-                }
-                $passport_info['pnfl'] = Pasport::where('id', $user->user->pasport_id)->first()->pnfl ?? null;
-                $passport_info['pasport_seria'] = Pasport::where('id', $user->user->pasport_id)->first()->pasport_seria ?? null;
-                $passport_info['pasport_seria_code'] = Pasport::where('id', $user->user->pasport_id)->first()->pasport_seria_code ?? null;
-                $passport_info['user_name']=PersonalInfo::where('user_id', $user->user->id)->first()->full_name ?? null;
-                $passport_info['gender']=PersonalInfo::where('user_id', $user->user->id)->first()->gender ?? null;
-                $passport_info['email']=PersonalInfo::where('user_id', $user->user->id)->first()->email ?? null;
-                $passport_info['nationality']=PersonalInfo::where('user_id', $user->user->id)->first()->nationality ?? null;
-                $passport_info['birth_date']=PersonalInfo::where('user_id', $user->user->id)->first()->birth_date ?? null;
-                $passport_info['phone']=PersonalInfo::where('user_id', $user->user->id)->first()->phone ?? null;
-                $passport_info['avatar']=Avatar::where('user_id', $user->user->id)->first()->photo ?? null;
-                $passport_info['score']=Check::where('user_id', $user->user->id)->first()->score ?? null;
-                $passport_info['all_score']=$result ?? null;
-                $passport_info['training_direction']=Training::where('user_id', $user->user->id)->first()->direction ?? null;
-                $passport_info['training_date_end']=Training::where('user_id', $user->user->id)->first()->date_end ?? null;
-                $passport_info['training_date_start']=Training::where('user_id', $user->user->id)->first()->date_start ?? null;
-                $passport_info['education_specialization']=Education::select('specialization')->where('user_id', $user->user->id)->first() ?? null;
-                $passport_info['check_user']=CheckUser::where('user_id', $user->user->id)->first()->permission ?? null;
-                $passport_info['portfolio_user']=PortfolioUser::where('user_id', $user->user->id)->first()->permission ?? null;
-                $passport_info['statistic_user']=StatisticUser::where('user_id', $user->user->id)->first()->permission ?? null;
-                $passport_info['user_id']=$user->user->id ?? null;
 
-                $passport_info['region']= Region::select(LocaleTrait::convert('name'))->where('id', $user->user->region_id)->first() ?? null;
+            foreach ($direction_user as $user){
+
+                if ($fillial_id==$user->user->fillial_id){
+
+                    $getUser = User::find($user->user->id)->check;
+                    $result=0;
+                    foreach ($getUser as $score){
+                        $result += $score->score;
+                    }
+                    $passport_info['pnfl'] = Pasport::where('id', $user->user->pasport_id)->first()->pnfl ?? null;
+                    $passport_info['filliad_id'] =  $user->user->fillial_id ?? null;
+                    $passport_info['pasport_seria'] = Pasport::where('id', $user->user->pasport_id)->first()->pasport_seria ?? null;
+                    $passport_info['pasport_seria_code'] = Pasport::where('id', $user->user->pasport_id)->first()->pasport_seria_code ?? null;
+                    $passport_info['user_name']=PersonalInfo::where('user_id', $user->user->id)->first()->full_name ?? null;
+                    $passport_info['gender']=PersonalInfo::where('user_id', $user->user->id)->first()->gender ?? null;
+                    $passport_info['email']=PersonalInfo::where('user_id', $user->user->id)->first()->email ?? null;
+                    $passport_info['nationality']=PersonalInfo::where('user_id', $user->user->id)->first()->nationality ?? null;
+                    $passport_info['birth_date']=PersonalInfo::where('user_id', $user->user->id)->first()->birth_date ?? null;
+                    $passport_info['phone']=PersonalInfo::where('user_id', $user->user->id)->first()->phone ?? null;
+                    $passport_info['avatar']=Avatar::where('user_id', $user->user->id)->first()->photo ?? null;
+                    $passport_info['score']=Check::where('user_id', $user->user->id)->first()->score ?? null;
+                    $passport_info['all_score']=$result ?? null;
+                    $passport_info['training_direction']=Training::where('user_id', $user->user->id)->first()->direction ?? null;
+                    $passport_info['training_date_end']=Training::where('user_id', $user->user->id)->first()->date_end ?? null;
+                    $passport_info['training_date_start']=Training::where('user_id', $user->user->id)->first()->date_start ?? null;
+                    $passport_info['education_specialization']=Education::select('specialization')->where('user_id', $user->user->id)->first() ?? null;
+                    $passport_info['check_user']=CheckUser::where('user_id', $user->user->id)->first()->permission ?? null;
+                    $passport_info['portfolio_user']=PortfolioUser::where('user_id', $user->user->id)->first()->permission ?? null;
+                    $passport_info['statistic_user']=StatisticUser::where('user_id', $user->user->id)->first()->permission ?? null;
+                    $passport_info['user_id']=$user->user->id ?? null;
+
+                    $passport_info['region']= Region::select(LocaleTrait::convert('name'))->where('id', $user->user->region_id)->first() ?? null;
+                }
                 $data[] = $passport_info;
-                $users[] = $user ?? null;
 
             }
 

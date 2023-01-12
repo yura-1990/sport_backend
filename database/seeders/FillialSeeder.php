@@ -15,10 +15,10 @@ class FillialSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('fillials')->insert([
+       DB::table('fillials')->insert([
             'name_en' => 'Tashkent',
             'name_uz' => 'Toshkent',
-            'name_ru' => 'Ташкент',
+            'name_ru' => 'Тошкент',
         ]);
         DB::table('fillials')->insert([
             'name_en' => 'Samarkhand',

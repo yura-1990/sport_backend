@@ -15,11 +15,11 @@
     },
     "servers": [
         {
-            "url": "https://sport.napaautomotive.uz/",
+            "url": "http://localhost:8000/",
             "description": "Sport api server link"
         },
         {
-            "url": "https://sport.napaautomotive.uz/",
+            "url": "http://localhost:8000/",
             "description": "Sport api server link"
         }
     ],
@@ -1547,7 +1547,7 @@
                 }
             }
         },
-        "/api/direction": {
+        "/api/direction/{filliad_id}": {
             "get": {
                 "tags": [
                     "Direction"
@@ -1563,6 +1563,16 @@
                         "schema": {
                             "type": "string"
                         }
+                    },
+                    {
+                        "name": "filliad_id",
+                        "in": "path",
+                        "description": "filliad id for direction data",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
                     }
                 ],
                 "responses": {
@@ -1576,7 +1586,9 @@
                         "description": "Invalid status value"
                     }
                 }
-            },
+            }
+        },
+        "/api/direction": {
             "post": {
                 "tags": [
                     "Direction"
@@ -2354,7 +2366,7 @@
                 }
             }
         },
-        "/api/direction_with_user/{direction_id}": {
+        "/api/direction_with_user/{direction_id}/{fillial_id}": {
             "get": {
                 "tags": [
                     "Evaluate"
@@ -2375,6 +2387,16 @@
                         "name": "direction_id",
                         "in": "path",
                         "description": "direction_id for check data",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    },
+                    {
+                        "name": "fillial_id",
+                        "in": "path",
+                        "description": "fillial_id for check data",
                         "required": true,
                         "schema": {
                             "type": "integer",
@@ -2780,6 +2802,212 @@
                     },
                     "400": {
                         "description": "Invalid status value"
+                    }
+                }
+            }
+        },
+        "/api/images": {
+            "get": {
+                "tags": [
+                    "Images"
+                ],
+                "summary": "Get all data from Images database",
+                "description": "Via this link All Images` datas come",
+                "operationId": "image",
+                "parameters": [
+                    {
+                        "name": "Accept-Language",
+                        "in": "header",
+                        "description": "Set language parameter by typing uz, ru, en",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Invalid status value"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Images"
+                ],
+                "summary": "Create an image",
+                "operationId": "storeImage",
+                "parameters": [
+                    {
+                        "name": "Accept-Language",
+                        "in": "header",
+                        "description": "Set language parameter by typing uz, ru, en",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Input data format",
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "image": {
+                                        "description": "upload any image",
+                                        "type": "file"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    }
+                }
+            }
+        },
+        "/api/image/{image}": {
+            "get": {
+                "tags": [
+                    "Images"
+                ],
+                "summary": "Get one data from Images database",
+                "description": "Via this link a Images`s data comes to show",
+                "operationId": "showImage",
+                "parameters": [
+                    {
+                        "name": "Accept-Language",
+                        "in": "header",
+                        "description": "Set language parameter by typing uz, ru, en",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "image",
+                        "in": "path",
+                        "description": "ID for image data",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Invalid status value"
+                    }
+                }
+            }
+        },
+        "/api/image/{image}/update": {
+            "post": {
+                "tags": [
+                    "Images"
+                ],
+                "summary": "Updated",
+                "description": "Update this image",
+                "operationId": "updateImage",
+                "parameters": [
+                    {
+                        "name": "Accept-Language",
+                        "in": "header",
+                        "description": "Set language parameter by typing uz, ru, en",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "image",
+                        "in": "path",
+                        "description": "image that to be updated",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Input data format",
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "images": {
+                                        "description": "update",
+                                        "type": "file"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "400": {
+                        "description": "Invalid avatar supplied"
+                    },
+                    "404": {
+                        "description": "avatar not found"
+                    },
+                    "200": {
+                        "description": "successful operation"
+                    }
+                }
+            }
+        },
+        "/api/image/{image}/delete": {
+            "delete": {
+                "tags": [
+                    "Images"
+                ],
+                "summary": "Deletes a image",
+                "operationId": "destroyImage",
+                "parameters": [
+                    {
+                        "name": "Accept-Language",
+                        "in": "header",
+                        "description": "Set language parameter by typing uz, ru, en",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "image",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "Invalid course supplied"
+                    },
+                    "404": {
+                        "description": "Avatar not found"
                     }
                 }
             }
@@ -3871,6 +4099,238 @@
                     },
                     {
                         "name": "statisticUser",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "Invalid course supplied"
+                    },
+                    "404": {
+                        "description": "Avatar not found"
+                    }
+                }
+            }
+        },
+        "/api/time_managment": {
+            "get": {
+                "tags": [
+                    "Times"
+                ],
+                "summary": "Get all data from TimeManagment database",
+                "description": "Via this link All TimeManagments` datas come",
+                "operationId": "timeManagment",
+                "parameters": [
+                    {
+                        "name": "Accept-Language",
+                        "in": "header",
+                        "description": "Set language parameter by typing uz, ru, en",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Invalid status value"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Times"
+                ],
+                "summary": "Create a times",
+                "operationId": "storeTimeManagment",
+                "parameters": [
+                    {
+                        "name": "Accept-Language",
+                        "in": "header",
+                        "description": "Set language parameter by typing uz, ru, en",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Input data format",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "day_from": {
+                                        "description": "Set starting day",
+                                        "format": "date"
+                                    },
+                                    "time_from": {
+                                        "description": "Set starting time",
+                                        "format": "time"
+                                    },
+                                    "day_to": {
+                                        "description": "Set ending day",
+                                        "format": "date"
+                                    },
+                                    "time_to": {
+                                        "description": "Set ending time",
+                                        "format": "time"
+                                    }
+                                },
+                                "type": "object",
+                                "format": "date-time"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    }
+                }
+            }
+        },
+        "/api/time_managment/{timeManagment}": {
+            "get": {
+                "tags": [
+                    "Times"
+                ],
+                "summary": "Get one data from Images database",
+                "description": "Via this link a Images`s data comes to show",
+                "operationId": "showTimeManagment",
+                "parameters": [
+                    {
+                        "name": "Accept-Language",
+                        "in": "header",
+                        "description": "Set language parameter by typing uz, ru, en",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "timeManagment",
+                        "in": "path",
+                        "description": "ID for timeManegment data",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Invalid status value"
+                    }
+                }
+            }
+        },
+        "/api/time_managment/{timeManagment}/update": {
+            "put": {
+                "tags": [
+                    "Times"
+                ],
+                "summary": "Updated",
+                "description": "Update this timeManagment",
+                "operationId": "updateTimeManagment",
+                "parameters": [
+                    {
+                        "name": "Accept-Language",
+                        "in": "header",
+                        "description": "Set language parameter by typing uz, ru, en",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "timeManagment",
+                        "in": "path",
+                        "description": "image that to be updated",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Input data format",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "day_from": {
+                                        "description": "Set starting day",
+                                        "format": "date"
+                                    },
+                                    "time_from": {
+                                        "description": "Set starting time",
+                                        "format": "time"
+                                    },
+                                    "day_to": {
+                                        "description": "Set ending day",
+                                        "format": "date"
+                                    },
+                                    "time_to": {
+                                        "description": "Set ending time",
+                                        "format": "time"
+                                    }
+                                },
+                                "type": "object",
+                                "format": "date-time"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "400": {
+                        "description": "Invalid avatar supplied"
+                    },
+                    "404": {
+                        "description": "avatar not found"
+                    },
+                    "200": {
+                        "description": "successful operation"
+                    }
+                }
+            }
+        },
+        "/api/time_managment/{timeManagment}/delete": {
+            "delete": {
+                "tags": [
+                    "Times"
+                ],
+                "summary": "Deletes a Times",
+                "operationId": "destroyTimeManagment",
+                "parameters": [
+                    {
+                        "name": "Accept-Language",
+                        "in": "header",
+                        "description": "Set language parameter by typing uz, ru, en",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "timeManagment",
                         "in": "path",
                         "required": true,
                         "schema": {

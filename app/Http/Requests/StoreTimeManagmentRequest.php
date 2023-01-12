@@ -2,11 +2,9 @@
 
 namespace App\Http\Requests;
 
-use App\Models\TimeManagment;
-use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;
 
-class RegisterUserRequest extends FormRequest
+class StoreTimeManagmentRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,9 +24,10 @@ class RegisterUserRequest extends FormRequest
     public function rules()
     {
         return [
-            'login' => 'required|string',
-            'password' => 'required|string',
-            'fillial_id'=>'required'
+            "day_from"=>'required',
+            "time_from"=>'nullable',
+            "day_to"=>'required',
+            "time_to"=>'nullable',
         ];
     }
 }

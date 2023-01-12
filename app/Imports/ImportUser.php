@@ -35,12 +35,12 @@ class ImportUser implements ToCollection, WithHeadingRow
                 return array_search($value['region'], [$item->name_uz, $item->name_ru, $item->name_en]);
             })->first();
             if ($branch && $role) {*/
+            try {
                 DB::beginTransaction();
-                try {
-                    $passport = new Pasport();
-                    $passport->fill($value->toArray());
-                    $passport->save();
-                    DB::commit();
+                $passport = new Pasport();
+                $passport->fill($value->toArray());
+                $passport->save();
+                DB::commit();
                     /*if ($passport->save()) {
                         $user = new User();
                         $user->fill([

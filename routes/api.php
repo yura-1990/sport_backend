@@ -53,7 +53,7 @@ Route::middleware("localization")->group(function () {
         Route::delete('/pasport/{pasport}/delete', 'destroyPasport');
     });
     Route::controller(DirectionController::class)->group(function () {
-        Route::get('/direction', 'direction');
+        Route::get('/direction/{filliad_id?}', 'direction');
         Route::get('/direction/{direction}', 'showDirection');
         Route::post('/direction', 'storeDirection');
         Route::put('/direction/{direction}/update', 'updateDirection');
@@ -154,7 +154,7 @@ Route::middleware("localization")->group(function () {
     Route::controller(EvaluateController::class)->group(function () {
         Route::get('/evaluate/{user_id}', 'evaluate');
         Route::get('/direction_user/{direction_id}', 'countDirectionUser');
-        Route::get('/direction_with_user/{direction_id}', 'directionWithUser');
+        Route::get('/direction_with_user/{direction_id}/{fillial_id?}', 'directionWithUser');
         Route::get('/user_in_direction/{user_id}', 'userInDirection');
         Route::get('/downloadpdf/{user_id}', 'download');
         Route::get('/userInfo/{direction_id}/export', 'userInfoExport');
@@ -204,6 +204,22 @@ Route::middleware("localization")->group(function () {
         Route::put('/portfolioUser/{portfolioUser}/update', 'updatePortfolioUser');
         Route::delete('/portfolioUser/{portfolioUser}/delete', 'destroyPortfolioUser');
     });
+
+    Route::controller(\App\Http\Controllers\ImageController::class)->group(function () {
+        Route::get('/images', 'image');
+        Route::post('/images', 'storeImage');
+        Route::get('/image/{image}', 'showImage');
+        Route::post('/image/{image}/update', 'updateImage');
+        Route::delete('/image/{image}/delete', 'destroyImage');
+    });
+    Route::controller(\App\Http\Controllers\TimeManagmentController::class)->group(function () {
+        Route::get('/time_managment', 'timeManagment');
+        Route::post('/time_managment', 'storeTimeManagment');
+        Route::get('/time_managment/{timeManagment}', 'showTimeManagment');
+        Route::put('/time_managment/{timeManagment}/update', 'updateTimeManagment');
+        Route::delete('/time_managment/{timeManagment}/delete', 'destroyTimeManagment');
+    });
+
 });
 
 Route::controller(UniversityController::class)->group(function () {

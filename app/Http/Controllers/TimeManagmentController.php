@@ -2,59 +2,35 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreDirectionRequest;
-use App\Http\Requests\UpdateDirectionRequest;
-use App\Models\Check;
-use App\Models\CheckUser;
-use App\Models\Direction;
-use App\Models\PortfolioUser;
-use App\Models\StatisticUser;
-use App\Models\User;
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Storage;
+use App\Http\Requests\StoreTimeManagmentRequest;
+use App\Http\Requests\UpdateTimeManagmentRequest;
+use App\Models\TimeManagment;
 use Illuminate\Http\Request;
-use App\Http\Traits\LocaleTrait;
-use App\Http\Resources\DirectionResource;
+use Illuminate\Support\Facades\App;
 use Symfony\Component\HttpFoundation\Response;
+use Carbon\Carbon;
 
-/**
- *  @Controller("/course")
- */
-/**
- * {@inheritDoc}
- */
-class DirectionController extends Controller
+class TimeManagmentController extends Controller
 {
-    use LocaleTrait;
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return \Illuminate\Http\Response
      */
 
     /**
      * @OA\Get(
-     *     path="/api/direction/{filliad_id}",
-     *     tags={"Direction"},
-     *     summary="Get all data from Direction database",
-     *     description="Via this link All Courses` datas come",
-     *     operationId="course",
+     *     path="/api/time_managment",
+     *     tags={"Times"},
+     *     summary="Get all data from TimeManagment database",
+     *     description="Via this link All TimeManagments` datas come",
+     *     operationId="timeManagment",
      *     @OA\Parameter(
      *         name="Accept-Language",
      *         in="header",
      *         description="Set language parameter by typing uz, ru, en",
      *         @OA\Schema(
      *             type="string"
-     *         )
-     *     ),
-     *     @OA\Parameter(
-     *         name="filliad_id",
-     *         in="path",
-     *         description="filliad id for direction data",
-     *         required=false,
-     *         @OA\Schema(
-     *             type="integer",
-     *             format="int64",
      *         )
      *     ),
      *     @OA\Response(
@@ -69,25 +45,18 @@ class DirectionController extends Controller
      *         response=400,
      *         description="Invalid status value"
      *     ),
-     *
      *  )
      */
 
-    public function direction($filliad_id=null)
+    public function timeManagment()
     {
         try {
-            $direction = Direction::select('id', LocaleTrait::convert('title'))->get();
-            $datas=[];
-
-            foreach ($direction as $direct){
-                $datas[]=new DirectionResource($direct, $filliad_id);
-            }
+            $timeManagment = TimeManagment::all();
 
             return response()->json([
-                'status' => __('ok'),
-                'direction' => $datas,
+                'status' => __('Success'),
+                'timeManagment' => $timeManagment
             ],Response::HTTP_OK);
-
         }
         catch (\Exception $e){
             return
@@ -102,17 +71,16 @@ class DirectionController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return \Illuminate\Http\Response
      */
 
     /**
      * @OA\Post(
-     *     path="/api/direction",
-     *     tags={"Direction"},
-     *     summary="Create a new direction",
-     *     description="Create a new direction for course table in the database",
-     *     operationId="storeDirection",
-     *     @OA\Parameter(
+     *     path="/api/time_managment",
+     *     tags={"Times"},
+     *     summary="Create a times",
+     *     operationId="storeTimeManagment",
+     *      @OA\Parameter(
      *         name="Accept-Language",
      *         in="header",
      *         description="Set language parameter by typing uz, ru, en",
@@ -120,16 +88,32 @@ class DirectionController extends Controller
      *             type="string"
      *         )
      *     ),
-     *     @OA\RequestBody(
+     *      @OA\RequestBody(
      *         description="Input data format",
      *         @OA\MediaType(
      *             mediaType="application/json",
      *             @OA\Schema(
      *                 type="object",
+ *                      format="date-time",
      *                 @OA\Property(
-     *                     property="title",
-     *                     description="Type a title for a course",
-     *                     type="string",
+     *                     property="day_from",
+     *                     description="Set starting day",
+     *                     format="date"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="time_from",
+     *                     description="Set starting time",
+     *                     format="time"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="day_to",
+     *                     description="Set ending day",
+     *                     format="date"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="time_to",
+     *                     description="Set ending time",
+     *                     format="time"
      *                 ),
      *             )
      *         )
@@ -138,32 +122,26 @@ class DirectionController extends Controller
      *         response=200,
      *         description="successful operation",
      *     ),
-     *     @OA\Response(
-     *         response=400,
-     *         description="Invalid ID supplier"
-     *     ),
-     *     @OA\Response(
-     *         response=404,
-     *         description="Direction not found"
-     *     ),
      * )
-     *
      */
 
-    public function storeDirection(StoreDirectionRequest $request)
+    public function storeTimeManagment(StoreTimeManagmentRequest $request)
     {
         try {
             $request->validated();
-            $locale = LocaleTrait::convert('title');
-            $direction = new Direction;
-            $direction[$locale]=$request->title;
-            $direction->save();
+            $timeManagment = new TimeManagment();
+
+            $timeManagment->day_from = $request->day_from;
+            $timeManagment->time_from = $request->time_from;
+            $timeManagment->day_to = $request->day_to;
+            $timeManagment->time_to = $request->time_to;
+
+            $timeManagment->save();
 
             return response()->json([
-                'status' => __('ok'),
-                'local'=> App::getLocale(),
-                'message' => __('Data updated successfully'),
-                'direction' => $direction
+                'status' => __('Success'),
+                'Message' => __('Data created successfully'),
+                'timeManagment' => $timeManagment
             ],Response::HTTP_OK);
         }
         catch (\Exception $e){
@@ -173,24 +151,22 @@ class DirectionController extends Controller
                     'message' => $e->getMessage(),
                 ]);
         }
-
     }
-
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\JsonResponse
+     * @param  \App\Models\TimeManagment  $timeManagment
+     * @return \Illuminate\Http\Response
      */
 
     /**
      * @OA\Get(
-     *     path="/api/direction/{id}",
-     *     tags={"Direction"},
-     *     summary="Get one data from Direction database",
-     *     description="Via this link a Direction`s data comes to show",
-     *     operationId="showDirection",
+     *     path="/api/time_managment/{timeManagment}",
+     *     tags={"Times"},
+     *     summary="Get one data from Images database",
+     *     description="Via this link a Images`s data comes to show",
+     *     operationId="showTimeManagment",
      *     @OA\Parameter(
      *         name="Accept-Language",
      *         in="header",
@@ -200,9 +176,9 @@ class DirectionController extends Controller
      *         )
      *     ),
      *     @OA\Parameter(
-     *         name="id",
+     *         name="timeManagment",
      *         in="path",
-     *         description="ID for direction data",
+     *         description="ID for timeManegment data",
      *         required=true,
      *         @OA\Schema(
      *             type="integer",
@@ -224,14 +200,22 @@ class DirectionController extends Controller
      *  )
      */
 
-    public function showDirection($id)
+    public function showTimeManagment(TimeManagment $timeManagment)
     {
-        $data = Direction::select('id', LocaleTrait::convert('title'))->where('id', $id)->get();
         try {
+            $dayDate = Carbon::createFromFormat('Y-m-d', $timeManagment->day_from);
+            $toDate = Carbon::createFromFormat('Y-m-d', $timeManagment->day_to);
+
+            $check = Carbon::now()->between($dayDate, $toDate);
+
+
+
             return response()->json([
-                'status' => __('ok'),
-                'direction'=> $data
-            ],Response::HTTP_OK);
+                'status' => __('Success'),
+                'local'=> App::getLocale(),
+                'timeManagment' => $timeManagment,
+                'datas' => $check
+            ]);
         }
         catch (\Exception $e){
             return
@@ -246,17 +230,16 @@ class DirectionController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\JsonResponse
+     * @param  \App\Models\TimeManagment  $timeManagment
+     * @return \Illuminate\Http\Response
      */
-
     /**
      * @OA\Put(
-     *     path="/api/direction/{direction}/update",
-     *     tags={"Direction"},
+     *     path="/api/time_managment/{timeManagment}/update",
+     *     tags={"Times"},
      *     summary="Updated",
-     *     description="Update this direction",
-     *     operationId="updateDirection",
+     *     description="Update this timeManagment",
+     *     operationId="updateTimeManagment",
      *     @OA\Parameter(
      *         name="Accept-Language",
      *         in="header",
@@ -266,9 +249,9 @@ class DirectionController extends Controller
      *         )
      *     ),
      *     @OA\Parameter(
-     *         name="direction",
+     *         name="timeManagment",
      *         in="path",
-     *         description="direction that to be updated",
+     *         description="image that to be updated",
      *         required=true,
      *         @OA\Schema(
      *             type="integer",
@@ -277,11 +260,11 @@ class DirectionController extends Controller
      *     ),
      *     @OA\Response(
      *         response=400,
-     *         description="Invalid direction supplied"
+     *         description="Invalid avatar supplied"
      *     ),
      *     @OA\Response(
      *         response=404,
-     *         description="direction not found"
+     *         description="avatar not found"
      *     ),
      *     @OA\RequestBody(
      *         description="Input data format",
@@ -289,14 +272,30 @@ class DirectionController extends Controller
      *             mediaType="application/json",
      *             @OA\Schema(
      *                 type="object",
+     *                 format="date-time",
      *                 @OA\Property(
-     *                     property="title",
-     *                     description="Type a title for a course",
-     *                     type="string",
+     *                     property="day_from",
+     *                     description="Set starting day",
+     *                     format="date"
      *                 ),
-     *             )
-     *         )
-     *      ),
+     *                 @OA\Property(
+     *                     property="time_from",
+     *                     description="Set starting time",
+     *                     format="time"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="day_to",
+     *                     description="Set ending day",
+     *                     format="date"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="time_to",
+     *                     description="Set ending time",
+     *                     format="time"
+     *                 ),
+     *             ),
+     *         ),
+     *     ),
      *     @OA\Response(
      *         response=200,
      *         description="successful operation"
@@ -304,17 +303,23 @@ class DirectionController extends Controller
      *   )
      */
 
-    public function updateDirection(UpdateDirectionRequest $request, Direction $direction)
+    public function updateTimeManagment(UpdateTimeManagmentRequest $request, TimeManagment $timeManagment)
     {
         try {
             $request->validated();
-            $direction[LocaleTrait::convert('title')] = $request->title;
-            $direction->update();
+
+            $timeManagment->day_from = $request->day_from;
+            $timeManagment->time_from = $request->time_from;
+            $timeManagment->day_to = $request->day_to;
+            $timeManagment->time_to = $request->time_to;
+
+            $timeManagment->save();
 
             return response()->json([
-                'status' => __('ok'),
-                'direction'=> $direction->select('id', LocaleTrait::convert('title'))->where('id', $direction->id)->get(),
-            ],Response::HTTP_OK);
+                'status' => __('Success'),
+                'Message' => __('Data updated successfully'),
+                'timeManagment' => $timeManagment
+            ]);
         }
         catch (\Exception $e){
             return
@@ -328,16 +333,16 @@ class DirectionController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\JsonResponse
+     * @param  \App\Models\TimeManagment  $timeManagment
+     * @return \Illuminate\Http\Response
      */
 
     /**
      * @OA\Delete(
-     *     path="/api/direction/{id}/delete",
-     *     tags={"Direction"},
-     *     summary="Deletes a direction",
-     *     operationId="destroyDirection",
+     *     path="/api/time_managment/{timeManagment}/delete",
+     *     tags={"Times"},
+     *     summary="Deletes a Times",
+     *     operationId="destroyTimeManagment",
      *     @OA\Parameter(
      *         name="Accept-Language",
      *         in="header",
@@ -347,7 +352,7 @@ class DirectionController extends Controller
      *         )
      *     ),
      *     @OA\Parameter(
-     *         name="id",
+     *         name="timeManagment",
      *         in="path",
      *         required=true,
      *         @OA\Schema(
@@ -361,33 +366,21 @@ class DirectionController extends Controller
      *     ),
      *     @OA\Response(
      *         response=400,
-     *         description="Invalid direction supplied"
+     *         description="Invalid course supplied"
      *     ),
      *     @OA\Response(
      *         response=404,
-     *         description="direction not found"
+     *         description="Avatar not found"
      *     ),
      *  )
      */
 
-    public function destroyDirection($id)
+    public function destroyTimeManagment(TimeManagment $timeManagment)
     {
-        try {
-            $direction=Direction::find($id);
-            $direction->delete();
-            return response()->json([
-                'status' => __('ok'),
-                'direction'=>  $direction
-
-            ],Response::HTTP_OK);
-        }
-        catch (\Exception $e){
-            return
-                response()->json([
-                    'status' => false,
-                    'message' => $e->getMessage(),
-                ]);
-        }
-
+        $timeManagment->delete();
+        return response()->json([
+            'status' => 'success',
+            'timeManagment'=> $timeManagment
+        ]);
     }
 }

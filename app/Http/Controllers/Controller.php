@@ -26,11 +26,11 @@ use Illuminate\Routing\Controller as BaseController;
  *
  * @OA\Server(
  *     description="Sport api server link",
- *     url="https://sport.napaautomotive.uz/"
+ *     url="http://localhost:8000/"
  * )
  * @OA\Server(
  *     description="Sport api server link",
- *     url="https://sport.napaautomotive.uz/"
+ *     url="http://localhost:8000/"
  * )
  */
 class Controller extends BaseController

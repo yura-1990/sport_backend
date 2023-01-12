@@ -2,59 +2,34 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreDirectionRequest;
-use App\Http\Requests\UpdateDirectionRequest;
-use App\Models\Check;
-use App\Models\CheckUser;
-use App\Models\Direction;
-use App\Models\PortfolioUser;
-use App\Models\StatisticUser;
-use App\Models\User;
+use App\Http\Requests\StoreImageRequest;
+use App\Http\Requests\UpdateImageRequest;
+use App\Models\Image;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Http\Request;
-use App\Http\Traits\LocaleTrait;
-use App\Http\Resources\DirectionResource;
 use Symfony\Component\HttpFoundation\Response;
 
-/**
- *  @Controller("/course")
- */
-/**
- * {@inheritDoc}
- */
-class DirectionController extends Controller
+class ImageController extends Controller
 {
-    use LocaleTrait;
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return \Illuminate\Http\Response
      */
-
     /**
      * @OA\Get(
-     *     path="/api/direction/{filliad_id}",
-     *     tags={"Direction"},
-     *     summary="Get all data from Direction database",
-     *     description="Via this link All Courses` datas come",
-     *     operationId="course",
+     *     path="/api/images",
+     *     tags={"Images"},
+     *     summary="Get all data from Images database",
+     *     description="Via this link All Images` datas come",
+     *     operationId="image",
      *     @OA\Parameter(
      *         name="Accept-Language",
      *         in="header",
      *         description="Set language parameter by typing uz, ru, en",
      *         @OA\Schema(
      *             type="string"
-     *         )
-     *     ),
-     *     @OA\Parameter(
-     *         name="filliad_id",
-     *         in="path",
-     *         description="filliad id for direction data",
-     *         required=false,
-     *         @OA\Schema(
-     *             type="integer",
-     *             format="int64",
      *         )
      *     ),
      *     @OA\Response(
@@ -69,25 +44,16 @@ class DirectionController extends Controller
      *         response=400,
      *         description="Invalid status value"
      *     ),
-     *
      *  )
      */
-
-    public function direction($filliad_id=null)
+    public function image()
     {
         try {
-            $direction = Direction::select('id', LocaleTrait::convert('title'))->get();
-            $datas=[];
-
-            foreach ($direction as $direct){
-                $datas[]=new DirectionResource($direct, $filliad_id);
-            }
-
+            $images = Image::all();
             return response()->json([
-                'status' => __('ok'),
-                'direction' => $datas,
+                'status' => __('Success'),
+                'images' => $images
             ],Response::HTTP_OK);
-
         }
         catch (\Exception $e){
             return
@@ -102,17 +68,16 @@ class DirectionController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return \Illuminate\Http\Response
      */
 
     /**
      * @OA\Post(
-     *     path="/api/direction",
-     *     tags={"Direction"},
-     *     summary="Create a new direction",
-     *     description="Create a new direction for course table in the database",
-     *     operationId="storeDirection",
-     *     @OA\Parameter(
+     *     path="/api/images",
+     *     tags={"Images"},
+     *     summary="Create an image",
+     *     operationId="storeImage",
+     *      @OA\Parameter(
      *         name="Accept-Language",
      *         in="header",
      *         description="Set language parameter by typing uz, ru, en",
@@ -120,16 +85,16 @@ class DirectionController extends Controller
      *             type="string"
      *         )
      *     ),
-     *     @OA\RequestBody(
+     *      @OA\RequestBody(
      *         description="Input data format",
      *         @OA\MediaType(
-     *             mediaType="application/json",
+     *             mediaType="multipart/form-data",
      *             @OA\Schema(
      *                 type="object",
      *                 @OA\Property(
-     *                     property="title",
-     *                     description="Type a title for a course",
-     *                     type="string",
+     *                     property="image",
+     *                     description="upload any image",
+     *                     type="file"
      *                 ),
      *             )
      *         )
@@ -138,32 +103,26 @@ class DirectionController extends Controller
      *         response=200,
      *         description="successful operation",
      *     ),
-     *     @OA\Response(
-     *         response=400,
-     *         description="Invalid ID supplier"
-     *     ),
-     *     @OA\Response(
-     *         response=404,
-     *         description="Direction not found"
-     *     ),
      * )
-     *
      */
 
-    public function storeDirection(StoreDirectionRequest $request)
+    public function storeImage(StoreImageRequest $request)
     {
         try {
+
+
             $request->validated();
-            $locale = LocaleTrait::convert('title');
-            $direction = new Direction;
-            $direction[$locale]=$request->title;
-            $direction->save();
+            $image = new Image;
+            if ($request->hasFile('image')){
+                $path = $request->file('image')->store('images', 'public');
+            }
+            $image->images = $path ?? null;
+            $image->save();
 
             return response()->json([
-                'status' => __('ok'),
-                'local'=> App::getLocale(),
-                'message' => __('Data updated successfully'),
-                'direction' => $direction
+                'status' => __('Success'),
+                'Message' => __('Data created successfully'),
+                'image' => $image
             ],Response::HTTP_OK);
         }
         catch (\Exception $e){
@@ -173,24 +132,22 @@ class DirectionController extends Controller
                     'message' => $e->getMessage(),
                 ]);
         }
-
     }
-
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\JsonResponse
+     * @param  \App\Models\Image  $image
+     * @return \Illuminate\Http\Response
      */
 
     /**
      * @OA\Get(
-     *     path="/api/direction/{id}",
-     *     tags={"Direction"},
-     *     summary="Get one data from Direction database",
-     *     description="Via this link a Direction`s data comes to show",
-     *     operationId="showDirection",
+     *     path="/api/image/{image}",
+     *     tags={"Images"},
+     *     summary="Get one data from Images database",
+     *     description="Via this link a Images`s data comes to show",
+     *     operationId="showImage",
      *     @OA\Parameter(
      *         name="Accept-Language",
      *         in="header",
@@ -200,9 +157,9 @@ class DirectionController extends Controller
      *         )
      *     ),
      *     @OA\Parameter(
-     *         name="id",
+     *         name="image",
      *         in="path",
-     *         description="ID for direction data",
+     *         description="ID for image data",
      *         required=true,
      *         @OA\Schema(
      *             type="integer",
@@ -224,14 +181,14 @@ class DirectionController extends Controller
      *  )
      */
 
-    public function showDirection($id)
+    public function showImage(Image $image)
     {
-        $data = Direction::select('id', LocaleTrait::convert('title'))->where('id', $id)->get();
         try {
             return response()->json([
-                'status' => __('ok'),
-                'direction'=> $data
-            ],Response::HTTP_OK);
+                'status' => __('Success'),
+                'local'=> App::getLocale(),
+                'image' => $image,
+            ]);
         }
         catch (\Exception $e){
             return
@@ -246,17 +203,17 @@ class DirectionController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\JsonResponse
+     * @param  \App\Models\Image  $image
+     * @return \Illuminate\Http\Response
      */
 
     /**
-     * @OA\Put(
-     *     path="/api/direction/{direction}/update",
-     *     tags={"Direction"},
+     * @OA\Post(
+     *     path="/api/image/{image}/update",
+     *     tags={"Images"},
      *     summary="Updated",
-     *     description="Update this direction",
-     *     operationId="updateDirection",
+     *     description="Update this image",
+     *     operationId="updateImage",
      *     @OA\Parameter(
      *         name="Accept-Language",
      *         in="header",
@@ -266,9 +223,9 @@ class DirectionController extends Controller
      *         )
      *     ),
      *     @OA\Parameter(
-     *         name="direction",
+     *         name="image",
      *         in="path",
-     *         description="direction that to be updated",
+     *         description="image that to be updated",
      *         required=true,
      *         @OA\Schema(
      *             type="integer",
@@ -277,26 +234,26 @@ class DirectionController extends Controller
      *     ),
      *     @OA\Response(
      *         response=400,
-     *         description="Invalid direction supplied"
+     *         description="Invalid avatar supplied"
      *     ),
      *     @OA\Response(
      *         response=404,
-     *         description="direction not found"
+     *         description="avatar not found"
      *     ),
      *     @OA\RequestBody(
      *         description="Input data format",
      *         @OA\MediaType(
-     *             mediaType="application/json",
+     *             mediaType="multipart/form-data",
      *             @OA\Schema(
      *                 type="object",
      *                 @OA\Property(
-     *                     property="title",
-     *                     description="Type a title for a course",
-     *                     type="string",
+     *                     property="images",
+     *                     description="update",
+     *                     type="file"
      *                 ),
      *             )
      *         )
-     *      ),
+     *     ),
      *     @OA\Response(
      *         response=200,
      *         description="successful operation"
@@ -304,17 +261,25 @@ class DirectionController extends Controller
      *   )
      */
 
-    public function updateDirection(UpdateDirectionRequest $request, Direction $direction)
+
+    public function updateImage(UpdateImageRequest $request, Image $image)
     {
         try {
             $request->validated();
-            $direction[LocaleTrait::convert('title')] = $request->title;
-            $direction->update();
+
+            if ($request->hasFile('images')){
+                Storage::disk('public')->delete($image->images);
+                $path = $request->file('images')->store('images', 'public');
+            }
+
+            $image->images = $path ?? null;
+            $image->save();
 
             return response()->json([
-                'status' => __('ok'),
-                'direction'=> $direction->select('id', LocaleTrait::convert('title'))->where('id', $direction->id)->get(),
-            ],Response::HTTP_OK);
+                'status' => __('Success'),
+                'Message' => __('Data updated successfully'),
+                'image' => $image
+            ]);
         }
         catch (\Exception $e){
             return
@@ -328,16 +293,16 @@ class DirectionController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\JsonResponse
+     * @param  \App\Models\Image  $image
+     * @return \Illuminate\Http\Response
      */
 
     /**
      * @OA\Delete(
-     *     path="/api/direction/{id}/delete",
-     *     tags={"Direction"},
-     *     summary="Deletes a direction",
-     *     operationId="destroyDirection",
+     *     path="/api/image/{image}/delete",
+     *     tags={"Images"},
+     *     summary="Deletes a image",
+     *     operationId="destroyImage",
      *     @OA\Parameter(
      *         name="Accept-Language",
      *         in="header",
@@ -347,7 +312,7 @@ class DirectionController extends Controller
      *         )
      *     ),
      *     @OA\Parameter(
-     *         name="id",
+     *         name="image",
      *         in="path",
      *         required=true,
      *         @OA\Schema(
@@ -361,33 +326,22 @@ class DirectionController extends Controller
      *     ),
      *     @OA\Response(
      *         response=400,
-     *         description="Invalid direction supplied"
+     *         description="Invalid course supplied"
      *     ),
      *     @OA\Response(
      *         response=404,
-     *         description="direction not found"
+     *         description="Avatar not found"
      *     ),
      *  )
      */
 
-    public function destroyDirection($id)
+    public function destroyImage(Image $image)
     {
-        try {
-            $direction=Direction::find($id);
-            $direction->delete();
-            return response()->json([
-                'status' => __('ok'),
-                'direction'=>  $direction
-
-            ],Response::HTTP_OK);
-        }
-        catch (\Exception $e){
-            return
-                response()->json([
-                    'status' => false,
-                    'message' => $e->getMessage(),
-                ]);
-        }
-
+        Storage::disk('public')->delete($image->images);
+        $image->delete();
+        return response()->json([
+            'status' => 'success',
+            'image'=> $image
+        ]);
     }
 }

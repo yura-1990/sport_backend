@@ -753,4 +753,8 @@ class EducationNameSeeder extends Seeder
         ]);
         DB::table('education_names')->insert([
             'name_uz' => "Navoiy innovatsiyalar instituti",
-            'name_ru' => "Navoiy innovatsi
+            'name_ru' => "Navoiy innovatsiyalar instituti",
+            'name_en' => "Navoiy innovatsiyalar instituti",
+        ]);
+    }
+}

@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests;
 
+use App\Models\TimeManagment;
+use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StorePosportRequest extends FormRequest
@@ -13,7 +15,14 @@ class StorePosportRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        $timeManagment = TimeManagment::get()->last();
+
+        $dayDate = Carbon::createFromFormat('Y-m-d', $timeManagment->day_from);
+        $toDate = Carbon::createFromFormat('Y-m-d', $timeManagment->day_to);
+
+        $check = Carbon::now()->between($dayDate, $toDate);
+
+        return $check;
     }
 
     /**

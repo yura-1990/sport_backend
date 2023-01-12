@@ -9,6 +9,8 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class UserResource extends JsonResource
 {
+
+
     /**
      * Transform the resource into an array.
      *
@@ -22,7 +24,7 @@ class UserResource extends JsonResource
             'login'=>$this->login,
             'role_id'=>$this->role_id,
             'pasport_id'=>$this->pasport_id,
-            'fillial_id'=>$this->fillial_id,
+            'fillial_id'=> $this->fillial_id ,
             'check_user'=>CheckUser::where('user_id', $this->id)->first()->permission ?? null,
             'portfolio_user'=>PortfolioUser::where('user_id', $this->id)->first()->permission ?? null,
             'statistic_user'=>StatisticUser::where('user_id', $this->id)->first()->permission ?? null,

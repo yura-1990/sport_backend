@@ -21,6 +21,21 @@ class RegionSeeder extends Seeder
             'name_en' => 'Tashkent'
         ]);
         DB::table('regions')->insert([
+            'name_uz' => 'Samarqand',
+            'name_ru' => 'Самарканд',
+            'name_en' => 'Samarkand'
+        ]);
+        DB::table('regions')->insert([
+            'name_uz' => 'Nukus',
+            'name_ru' => 'Нукус',
+            'name_en' => 'Nukus'
+        ]);
+        DB::table('regions')->insert([
+            'name_uz' => 'Farg`ona',
+            'name_ru' => 'Фергана',
+            'name_en' => 'Fergana'
+        ]);
+        DB::table('regions')->insert([
             'name_uz' => 'Andijon',
             'name_ru' => 'Андижан',
             'name_en' => 'Andijan'
@@ -50,11 +65,7 @@ class RegionSeeder extends Seeder
             'name_ru' => 'Наманган',
             'name_en' => 'Namangan'
         ]);
-        DB::table('regions')->insert([
-            'name_uz' => 'Samarqand',
-            'name_ru' => 'Самарканд',
-            'name_en' => 'Samarkand'
-        ]);
+
         DB::table('regions')->insert([
             'name_uz' => 'Sirdaryo',
             'name_ru' => 'Сырдарья',
@@ -65,11 +76,7 @@ class RegionSeeder extends Seeder
             'name_ru' => 'Сурхандарьинская',
             'name_en' => 'Surkhandarya'
         ]);
-        DB::table('regions')->insert([
-            'name_uz' => 'Farg`ona',
-            'name_ru' => 'Фергана',
-            'name_en' => 'Fergana'
-        ]);
+
         DB::table('regions')->insert([
             'name_uz' => 'Xorazm',
             'name_ru' => 'Хорезм',

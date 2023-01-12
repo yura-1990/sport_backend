@@ -29,7 +29,9 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             RegionSeeder::class,
             DirectionSeeder::class,
-            DirectionCategorySeeder::class
+            DirectionCategorySeeder::class,
+            EducationNameSeeder::class,
+            WorkPlaceSeeder::class
         ]);
     }
 }

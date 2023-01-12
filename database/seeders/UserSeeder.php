@@ -24,25 +24,32 @@ class UserSeeder extends Seeder
             'pasport_id'=>1
         ]);
         DB::table('users')->insert([
-            'login' => 'samarqand_admin',
-            'password' => Hash::make('samarqand_admin'),
+            'login' => 'institut_admin',
+            'password' => Hash::make('institut_admin'),
             'role_id' => 2,
             'fillial_id'=> 1,
             'pasport_id'=>1
+        ]);
+        DB::table('users')->insert([
+            'login' => 'samarqand_admin',
+            'password' => Hash::make('samarqand_admin'),
+            'role_id' => 2,
+            'fillial_id'=> 2,
+            'pasport_id'=>2
         ]);
         DB::table('users')->insert([
             'login' => 'navoi_admin',
             'password' => Hash::make('navoi_admin'),
             'role_id' => 2,
-            'fillial_id'=> 1,
-            'pasport_id'=>1
+            'fillial_id'=> 3,
+            'pasport_id'=>3
         ]);
         DB::table('users')->insert([
             'login' => 'fargana_admin',
             'password' => Hash::make('fargana_admin'),
             'role_id' => 2,
-            'fillial_id'=> 1,
-            'pasport_id'=>1
+            'fillial_id'=> 4,
+            'pasport_id'=>4
         ]);
     }
 }
